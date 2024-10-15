@@ -1,0 +1,14 @@
+{
+  "name": "dormdesigner",
+  "version": "1.0.0",
+  "description": "Each subteam (Frontend, Backend, 3D) has their own branch and consists of 2 members. Each person maintains their own personal branch when developing and pushes only to their subteam's branch. All merge conflicts must be resolved at this level before proceeding.",
+  "main": "back-end/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
