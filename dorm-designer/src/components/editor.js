@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 
-const Cube = () => {
+const Editor = () => {
   const mountRef = useRef(null);
 
   useEffect(() => {

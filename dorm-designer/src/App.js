@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import Cube from './components/cube.js'
+import Editor from './components/editor.js'
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
         >
           Learn React
         </a>
-        <Cube />
+        <Editor />
       </header>
     </div>
   );
