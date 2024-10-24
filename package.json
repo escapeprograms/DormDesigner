@@ -4,12 +4,16 @@
   "description": "Each subteam (Frontend, Backend, 3D) has their own branch and consists of 2 members. Each person maintains their own personal branch when developing and pushes only to their subteam's branch. All merge conflicts must be resolved at this level before proceeding.",
   "main": "back-end/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    ".": "nodemon back-end/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "mongodb": "^6.10.0"
-  }
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.7.2"
+  },
+  "type": "module"
 }
