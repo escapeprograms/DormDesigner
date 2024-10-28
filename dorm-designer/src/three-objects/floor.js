@@ -6,17 +6,19 @@ function getFloorMesh(scene, vertices, color) { //vertices: [THREE.vector2]
     const shape = new THREE.Shape( vertices );
 
     const geometry = new THREE.ShapeGeometry( shape );
-    const mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: color, side: THREE.DoubleSide } ) );
+    const mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: color, side: THREE.DoubleSide } ) );
     //mesh.rotateX(Math.PI/2);
     
-    scene.add(mesh);
+    // scene.add(mesh);
+    return mesh;
 }
 
 function getWallMeshes(scene, vertices, color, height) { //vertices: [THREE.vector2]
+    let meshes = [];
     for (let i = 0; i < vertices.length-1; i++) {
         let width = vertices[i].distanceTo(vertices[i+1])
         let wallGeometry = new THREE.BoxGeometry(width, 0.1, height);
-        let wallMesh = new THREE.Mesh( wallGeometry, new THREE.MeshBasicMaterial( { color: color, side: THREE.DoubleSide } ) );
+        let wallMesh = new THREE.Mesh( wallGeometry, new THREE.MeshLambertMaterial( { color: color, side: THREE.DoubleSide } ) );
         scene.add(wallMesh);
 
 
@@ -29,9 +31,9 @@ function getWallMeshes(scene, vertices, color, height) { //vertices: [THREE.vect
         let angle = Math.atan2(vertices[i+1].y - vertices[i].y, vertices[i+1].x - vertices[i].x);
         wallMesh.rotateZ(angle);
 
-        
+        meshes.push(wallMesh);
     }
-
+    return meshes;
 }
 
 
