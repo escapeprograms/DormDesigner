@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import Editor from './components/editor.js'
 
+import EditorTest from './components/test.js'
+
 function App() {
   return (
     <div className="App">

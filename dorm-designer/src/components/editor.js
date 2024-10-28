@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
 
-import getFloorMesh from '../three-objects/floor';
+import {getFloorMesh, getWallMeshes} from '../three-objects/floor';
 
 const Editor = () => {
     const mountRef = useRef(null);
@@ -41,18 +41,20 @@ const Editor = () => {
             new THREE.Vector2(-4,-1),
             new THREE.Vector2(-4,-2),
             new THREE.Vector2(-3,-2),
-            new THREE.Vector2(-3,-3)
+            new THREE.Vector2(-3,-2.5)
         ];
         vertices = vertices.map(v => {
             return v.multiplyScalar(2)
         })
 
         const material2 = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-        const floor = getFloorMesh(scene, vertices, 0xffff00);
-
         
         const group = new THREE.Group();
-        group.add(floor);
+        group.rotateX(-Math.PI/2);
+
+        getFloorMesh(group, vertices, 0xffff00);
+        getWallMeshes(group, vertices, 0x0000ff, 2);
+        
         scene.add(group);
         const animate = () => {
             requestAnimationFrame(animate);
