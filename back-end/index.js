@@ -1,4 +1,5 @@
 
+
 import { MongoClient, ServerApiVersion } from 'mongodb';  
 
 const uri = 'mongodb+srv://ananyakoduru22:wJJdnMfiXTaPEyFs@cluster0.pjmeg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'; 
@@ -22,3 +23,5 @@ async function run() {
 }
 
 run().catch(console.dir);
+
+
