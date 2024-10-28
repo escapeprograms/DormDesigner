@@ -1,5 +1,5 @@
 import express from 'express';
-import LayoutManager from './managers/LayoutManager.js';
+import LayoutManager from '../managers/layoutManager.js';
 
 const router = express.Router();
 const layoutManager = new LayoutManager();
