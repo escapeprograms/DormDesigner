@@ -1,0 +1,21 @@
+.logo-container{
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    margin-top: 50px;
+    width: 600px;
+    background: transparent;
+    padding-bottom: 30px;
+}
+
+.umass-logo{
+    width: 30%;
+    height: auto;
+}
+
+.dorm-designer{
+    margin-top: 50px;
+    margin-left: 10px;
+    width: 70%;
+    height:80%;
+}
