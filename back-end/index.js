@@ -25,17 +25,8 @@ async function connectDB() {
   }
 }
 
-// Setting up API Route here
-app.get('/api/layouts', async (req, res) => {
-  try {
-    const database = client.db('dormDesigner'); 
-    const layouts = database.collection('layouts'); 
-    const result = await layouts.find().toArray();
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching layouts', error: error.message });
-  }
-});
+// Register the layout controller under the /api route
+app.use('/api', layoutController(client));
 
 app.listen(PORT, async () => {
   console.log(`Server running on http://localhost:${PORT}`);
