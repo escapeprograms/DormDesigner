@@ -4,6 +4,19 @@ import LayoutManager from '../managers/layoutManager.js';
 const router = express.Router();
 const layoutManager = new LayoutManager();
 
+// GET ALL Layouts
+router.get('/layouts', async (req, res) => {
+    try {
+        const layouts = await layoutManager.getAllLayouts();
+        if (!layouts || layouts.length === 0) {
+            return res.status(404).json({ message: "Layouts not found" });
+        }
+        res.json(layouts);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // GET layout by ID
 router.get('/:id', async (req, res) => {
     try {
@@ -35,16 +48,5 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
-// GET ALL Layouts, will use this clientside for now
-router.get('/layouts', async (req, res) => {
-    try {
-        const layout = await layoutManager.getAllLayouts();
-        if (!layout) return res.status(404).json({ message: "Layouts not found" });
-        res.json(layout);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
- });
 
 export default router;
