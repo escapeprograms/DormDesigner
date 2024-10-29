@@ -34,4 +34,29 @@ app.listen(PORT, async () => {
   await connectDB(); 
 });
 
+// ----------------------------------------------------
+// setting up Express server to handle API requests from the frontend ----------------------------
+const app = express();
+const PORT = 5000;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '../dorm-designer/build')));
+
+
+app.get('/api/data', (req, res) => {
+  res.json({ message: 'Hello from backend!' });
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dorm-designer/build', 'index.html'));
+});
+
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
+// -----------------------------------------------
 
