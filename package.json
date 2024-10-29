@@ -15,5 +15,6 @@
     "mongodb": "^6.10.0",
     "mongoose": "^8.7.2"
   },
-  "type": "module"
+  "type": "module",
+  "keywords": []
 }
