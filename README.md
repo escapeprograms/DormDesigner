@@ -19,3 +19,11 @@ For working on frontend, go into the 'dorm-designer' folder and run `npm i`.
 Run backend: `node .` in `DormDesigner`
 Run frontend: `npm start`
 Build frontend: `npm run build`
+
+Build the frontend first, then run backend. Running frontend is for development only.
+
+### Database information
+
+This is some information about connecting to MongoDB Atlas, our database solution. 
+To run the system while connected to the database:
+- Run 'npm install'
