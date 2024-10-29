@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
+import axios from 'axios'; 
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
-
 import {getFloorMesh, getWallMeshes} from './three-objects/floor';
 
 const Editor = () => {
@@ -20,64 +20,92 @@ const Editor = () => {
 
         const controls = new OrbitControls(camera, renderer.domElement);
 
-
-        //floor
-
-        let vertices = [
-            new THREE.Vector2(-3,-2.5),
-            new THREE.Vector2(0,-2.5),
-            new THREE.Vector2(0,-1.5),
-            new THREE.Vector2(2,-1.5),
-            new THREE.Vector2(2,-2.5),
-            new THREE.Vector2(3,-2.5),
-            new THREE.Vector2(3,1.5),
-            new THREE.Vector2(2,1.5),
-            new THREE.Vector2(2,2.5),
-            new THREE.Vector2(-2,2.5),
-            new THREE.Vector2(-2,1.5),
-            new THREE.Vector2(-3,1.5),
-            new THREE.Vector2(-3,1),
-            new THREE.Vector2(-4,1),
-            new THREE.Vector2(-4,0),
-            new THREE.Vector2(-3,0),
-            new THREE.Vector2(-3,-1),
-            new THREE.Vector2(-4,-1),
-            new THREE.Vector2(-4,-2),
-            new THREE.Vector2(-3,-2),
-            new THREE.Vector2(-3,-2.5)
-        ];
-
-        //vertices = await fetch("/")
-        vertices = vertices.map(v => {
-            return v.multiplyScalar(2)
-        })
+        const group = new THREE.Group();
+        group.rotateX(-Math.PI/2);
+        
+        
 
         const material2 = new THREE.MeshLambertMaterial({ color: 0xffff00 });
         
-        const group = new THREE.Group();
-        group.rotateX(-Math.PI/2);
-
-        const floor = getFloorMesh(group, vertices, 0xffffff);
-        const walls = getWallMeshes(group, vertices, 0xddccbb, 2);
 
 
-        const loader = new THREE.TextureLoader();
-
-        console.log("hello");
-
-        loader.load(`${process.env.PUBLIC_URL}/wood_texture.jpg`, (texture) => {
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
-            texture.repeat.set(0.05, 0.05);
-            texture.offset.set(0.8, 0.8);
-            const material = new THREE.MeshPhongMaterial({map: texture});
-            floor.material = material;
-            scene.add(floor);
-            console.log("changing material");
-            renderer.render(scene, camera);
+        //load floor
+        axios.get('/api/layouts').then((data) => {
+            let vertices = data.map((v) => {
+                return new THREE.Vector2(v[0], v[1]);
+            });
+            //vertices = await fetch("/")
+            vertices = vertices.map(v => {
+                return v.multiplyScalar(2)
+            });
+            const floor = getFloorMesh(group, vertices, 0xffffff);
+            const walls = getWallMeshes(group, vertices, 0xddccbb, 2);
+    
+    
+            const loader = new THREE.TextureLoader();
+    
+            loader.load(`${process.env.PUBLIC_URL}/wood_texture.jpg`, (texture) => {
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;
+                texture.repeat.set(0.05, 0.05);
+                texture.offset.set(0.8, 0.8);
+                const material = new THREE.MeshPhongMaterial({map: texture});
+                floor.material = material;
+                scene.add(floor);
+                console.log("changing material");
+                renderer.render(scene, camera);
+            });
+    
+            walls.forEach((wall) => scene.add(wall));
+        }).catch((e) => {
+            let vertices = [
+                new THREE.Vector2(-3,-2.5),
+                new THREE.Vector2(0,-2.5),
+                new THREE.Vector2(0,-1.5),
+                new THREE.Vector2(2,-1.5),
+                new THREE.Vector2(2,-2.5),
+                new THREE.Vector2(3,-2.5),
+                new THREE.Vector2(3,1.5),
+                new THREE.Vector2(2,1.5),
+                new THREE.Vector2(2,2.5),
+                new THREE.Vector2(-2,2.5),
+                new THREE.Vector2(-2,1.5),
+                new THREE.Vector2(-3,1.5),
+                new THREE.Vector2(-3,1),
+                new THREE.Vector2(-4,1),
+                new THREE.Vector2(-4,0),
+                new THREE.Vector2(-3,0),
+                new THREE.Vector2(-3,-1),
+                new THREE.Vector2(-4,-1),
+                new THREE.Vector2(-4,-2),
+                new THREE.Vector2(-3,-2),
+                new THREE.Vector2(-3,-2.5)
+            ];
+            //vertices = await fetch("/")
+            vertices = vertices.map(v => {
+                return v.multiplyScalar(2)
+            });
+            const floor = getFloorMesh(group, vertices, 0xffffff);
+            const walls = getWallMeshes(group, vertices, 0xddccbb, 2);
+    
+    
+            const loader = new THREE.TextureLoader();
+    
+            loader.load(`${process.env.PUBLIC_URL}/wood_texture.jpg`, (texture) => {
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;
+                texture.repeat.set(0.05, 0.05);
+                texture.offset.set(0.8, 0.8);
+                const material = new THREE.MeshPhongMaterial({map: texture});
+                floor.material = material;
+                scene.add(floor);
+                console.log("changing material");
+                renderer.render(scene, camera);
+            });
+    
+            walls.forEach((wall) => scene.add(wall));
         });
 
-        walls.forEach((wall) => scene.add(wall));
         // scene.add(group);
         
         // group.add(floor);
