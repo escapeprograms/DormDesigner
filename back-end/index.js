@@ -1,4 +1,5 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
+import layoutController from './controllers/layoutController.js';
 import express from 'express';
 import layoutController from './controllers/layoutController.js';
 
