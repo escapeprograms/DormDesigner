@@ -31,7 +31,8 @@ const Editor = () => {
 
         //load floor
         axios.get('/api/layouts').then((data) => {
-            let vertices = data.map((v) => {
+            console.log(data, "!!!!")
+            let vertices = data.data[3].vertices.map((v) => {
                 return new THREE.Vector2(v[0], v[1]);
             });
             //vertices = await fetch("/")
@@ -57,28 +58,31 @@ const Editor = () => {
             });
     
             walls.forEach((wall) => scene.add(wall));
+            console.log("LAYOUT REQUEST WORKS!");
         }).catch((e) => {
+            console.log(e);
+            console.log("LAYOUT FAIL")
             let vertices = [
                 new THREE.Vector2(-3,-2.5),
                 new THREE.Vector2(0,-2.5),
-                new THREE.Vector2(0,-1.5),
-                new THREE.Vector2(2,-1.5),
-                new THREE.Vector2(2,-2.5),
-                new THREE.Vector2(3,-2.5),
-                new THREE.Vector2(3,1.5),
-                new THREE.Vector2(2,1.5),
-                new THREE.Vector2(2,2.5),
-                new THREE.Vector2(-2,2.5),
-                new THREE.Vector2(-2,1.5),
-                new THREE.Vector2(-3,1.5),
-                new THREE.Vector2(-3,1),
-                new THREE.Vector2(-4,1),
-                new THREE.Vector2(-4,0),
-                new THREE.Vector2(-3,0),
-                new THREE.Vector2(-3,-1),
-                new THREE.Vector2(-4,-1),
-                new THREE.Vector2(-4,-2),
-                new THREE.Vector2(-3,-2),
+                // new THREE.Vector2(0,-1.5),
+                // new THREE.Vector2(2,-1.5),
+                // new THREE.Vector2(2,-2.5),
+                // new THREE.Vector2(3,-2.5),
+                // new THREE.Vector2(3,1.5),
+                // new THREE.Vector2(2,1.5),
+                // new THREE.Vector2(2,2.5),
+                // new THREE.Vector2(-2,2.5),
+                // new THREE.Vector2(-2,1.5),
+                // new THREE.Vector2(-3,1.5),
+                // new THREE.Vector2(-3,1),
+                // new THREE.Vector2(-4,1),
+                // new THREE.Vector2(-4,0),
+                // new THREE.Vector2(-3,0),
+                // new THREE.Vector2(-3,-1),
+                // new THREE.Vector2(-4,-1),
+                // new THREE.Vector2(-4,-2),
+                // new THREE.Vector2(-3,-2),
                 new THREE.Vector2(-3,-2.5)
             ];
             //vertices = await fetch("/")
