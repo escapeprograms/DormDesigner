@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
 
-import {getFloorMesh, getWallMeshes} from '../three-objects/floor';
+import {getFloorMesh, getWallMeshes} from './Editor/three-objects/floor';
 
 const Editor = () => {
     const mountRef = useRef(null);

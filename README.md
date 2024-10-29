@@ -14,11 +14,13 @@ For everyone, inside the `DormDesigner` folder, run `npm i`.
 
 For working on frontend, go into the 'dorm-designer' folder and run `npm i`.
 
+Run `npm i react-scripts` and`npm i react-router-dom` as well.
+
 # Running
 
 Run backend: `node .` in `DormDesigner`
-Run frontend: `npm start`
-Build frontend: `npm run build`
+Run frontend: `npm start` in `dorm-designer`
+Build frontend: `npm run build` in `dorm-designer`
 
 Build the frontend first, then run backend. Running frontend is for development only.
 

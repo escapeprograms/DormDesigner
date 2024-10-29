@@ -1,4 +1,5 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
+import layoutController from './controllers/layoutController.js';
 import express from 'express';
 
 const uri = 'mongodb+srv://ananyakoduru22:wJJdnMfiXTaPEyFs@cluster0.pjmeg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
@@ -26,7 +27,7 @@ async function connectDB() {
 }
 
 // Register the layout controller under the /api route
-app.use('/api', layoutController(client));
+app.use('/api', layoutController);
 
 app.listen(PORT, async () => {
   console.log(`Server running on http://localhost:${PORT}`);
