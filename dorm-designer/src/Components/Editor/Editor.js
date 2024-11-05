@@ -24,7 +24,28 @@ const Editor = () => {
         const group = new THREE.Group();
         group.rotateX(-Math.PI/2);
         
-        
+        //ray casting
+        const raycaster = new THREE.Raycaster();
+        let hoverSelection = null; //current mouse hover selection
+        function getSelection(event) {
+            const mouse = new THREE.Vector2();
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+          
+            // Update the raycaster's origin and direction
+            raycaster.setFromCamera(mouse, camera);
+          
+            // Intersect the ray with the scene
+            const intersects = raycaster.intersectObjects(objects.map(o => o.mesh));
+          
+            // Check if the first intersected object is your cube
+            if (intersects.length > 0) {
+                hoverSelection = intersects[0].object;
+            }
+            else {
+                hoverSelection = null;
+            }
+          }
 
         const material2 = new THREE.MeshLambertMaterial({ color: 0xffff00 });
         
@@ -116,12 +137,12 @@ const Editor = () => {
         let testGeometry = new THREE.BoxGeometry(1,1,1);
         let testFootprint =  [new THREE.Vector2(0,0), new THREE.Vector2(1,0), new THREE.Vector2(1,1), new THREE.Vector2(0,1)];
 
-        objects.push(new FloorItem("id", new THREE.Mesh(testGeometry), [testFootprint]));
+        objects.push(new FloorItem("id", new THREE.Mesh(testGeometry, material2), [testFootprint]));
 
-        for (let i = 0; i < objects.length; i++) {
-            scene.add(objects[i].mesh);
-        }
+        scene.add(objects[0].mesh);
+        window.addEventListener('mousemove', getSelection);
 
+        
         //rotate everything
         scene.add(group);
         
@@ -141,7 +162,11 @@ const Editor = () => {
 
         const animate = () => {
             requestAnimationFrame(animate);
-        
+            //get selection
+            if (hoverSelection) {
+                console.log(hoverSelection);
+                hoverSelection.material.color.set("red");
+            }
             controls.update();
             renderer.render(scene, camera);
         };
