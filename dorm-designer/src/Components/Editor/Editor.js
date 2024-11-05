@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import axios from 'axios'; 
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
 import {getFloorMesh, getWallMeshes} from './three-objects/floor';
+import { DormObject, FloorItem } from './DormObject';
 
 const Editor = () => {
     const mountRef = useRef(null);
@@ -39,8 +40,8 @@ const Editor = () => {
             vertices = vertices.map(v => {
                 return v.multiplyScalar(2)
             });
-            const floor = getFloorMesh(group, vertices, 0xffffff);
-            const walls = getWallMeshes(group, vertices, 0xddccbb, 2);
+            const floor = getFloorMesh(vertices, 0xffffff);
+            const walls = getWallMeshes(vertices, 0xddccbb, 2);
     
     
             const loader = new THREE.TextureLoader();
@@ -52,12 +53,12 @@ const Editor = () => {
                 texture.offset.set(0.8, 0.8);
                 const material = new THREE.MeshPhongMaterial({map: texture});
                 floor.material = material;
-                scene.add(floor);
+                group.add(floor);
                 console.log("changing material");
                 renderer.render(scene, camera);
             });
     
-            walls.forEach((wall) => scene.add(wall));
+            walls.forEach((wall) => group.add(wall));
             console.log("LAYOUT REQUEST WORKS!");
         }).catch((e) => {
             console.log(e);
@@ -65,32 +66,32 @@ const Editor = () => {
             let vertices = [
                 new THREE.Vector2(-3,-2.5),
                 new THREE.Vector2(0,-2.5),
-                // new THREE.Vector2(0,-1.5),
-                // new THREE.Vector2(2,-1.5),
-                // new THREE.Vector2(2,-2.5),
-                // new THREE.Vector2(3,-2.5),
-                // new THREE.Vector2(3,1.5),
-                // new THREE.Vector2(2,1.5),
-                // new THREE.Vector2(2,2.5),
-                // new THREE.Vector2(-2,2.5),
-                // new THREE.Vector2(-2,1.5),
-                // new THREE.Vector2(-3,1.5),
-                // new THREE.Vector2(-3,1),
-                // new THREE.Vector2(-4,1),
-                // new THREE.Vector2(-4,0),
-                // new THREE.Vector2(-3,0),
-                // new THREE.Vector2(-3,-1),
-                // new THREE.Vector2(-4,-1),
-                // new THREE.Vector2(-4,-2),
-                // new THREE.Vector2(-3,-2),
+                new THREE.Vector2(0,-1.5),
+                new THREE.Vector2(2,-1.5),
+                new THREE.Vector2(2,-2.5),
+                new THREE.Vector2(3,-2.5),
+                new THREE.Vector2(3,1.5),
+                new THREE.Vector2(2,1.5),
+                new THREE.Vector2(2,2.5),
+                new THREE.Vector2(-2,2.5),
+                new THREE.Vector2(-2,1.5),
+                new THREE.Vector2(-3,1.5),
+                new THREE.Vector2(-3,1),
+                new THREE.Vector2(-4,1),
+                new THREE.Vector2(-4,0),
+                new THREE.Vector2(-3,0),
+                new THREE.Vector2(-3,-1),
+                new THREE.Vector2(-4,-1),
+                new THREE.Vector2(-4,-2),
+                new THREE.Vector2(-3,-2),
                 new THREE.Vector2(-3,-2.5)
             ];
             //vertices = await fetch("/")
             vertices = vertices.map(v => {
                 return v.multiplyScalar(2)
             });
-            const floor = getFloorMesh(group, vertices, 0xffffff);
-            const walls = getWallMeshes(group, vertices, 0xddccbb, 2);
+            const floor = getFloorMesh(vertices, 0xffffff);
+            const walls = getWallMeshes(vertices, 0xddccbb, 2);
     
     
             const loader = new THREE.TextureLoader();
@@ -102,20 +103,29 @@ const Editor = () => {
                 texture.offset.set(0.8, 0.8);
                 const material = new THREE.MeshPhongMaterial({map: texture});
                 floor.material = material;
-                scene.add(floor);
+                group.add(floor);
                 console.log("changing material");
                 renderer.render(scene, camera);
             });
     
-            walls.forEach((wall) => scene.add(wall));
+            walls.forEach((wall) => group.add(wall));
         });
 
-        // scene.add(group);
-        
-        // group.add(floor);
-        // group.add(walls);
+        //load objects
+        let objects = [];
+        let testGeometry = new THREE.BoxGeometry(1,1,1);
+        let testFootprint =  [new THREE.Vector2(0,0), new THREE.Vector2(1,0), new THREE.Vector2(1,1), new THREE.Vector2(0,1)];
 
-        // scene.add(group);
+        objects.push(new FloorItem("id", new THREE.Mesh(testGeometry), [testFootprint]));
+
+        for (let i = 0; i < objects.length; i++) {
+            scene.add(objects[i].mesh);
+        }
+
+        //rotate everything
+        scene.add(group);
+        
+        //lighting
 
         const light = new THREE.AmbientLight(0xffffff, 1);
         scene.add(light);
