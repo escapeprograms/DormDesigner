@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import axios from 'axios'; 
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
 import {getFloorMesh, getWallMeshes} from './three-objects/floor';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const Editor = () => {
     const mountRef = useRef(null);
@@ -11,12 +12,13 @@ const Editor = () => {
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.set( 0, 5, 15 );
-        const renderer = new THREE.WebGLRenderer();
+        const renderer = new THREE.WebGLRenderer({antialias: true});
 
         scene.background = new THREE.Color(0xdddddd);
 
         renderer.setSize(window.innerWidth, window.innerHeight);
         mountRef.current.appendChild(renderer.domElement);
+        
 
         const controls = new OrbitControls(camera, renderer.domElement);
 
@@ -58,6 +60,34 @@ const Editor = () => {
             });
     
             walls.forEach((wall) => scene.add(wall));
+
+            //adding bed
+            const modelsLoader = new GLTFLoader();
+
+            let bedMesh;
+
+            modelsLoader.load(`${process.env.PUBLIC_URL}/bed-all-together3.glb`, function ( gltf ) {
+                bedMesh = gltf.scene;
+                // scene.add(bedMesh);
+                const bedJSON = bedMesh.toJSON();
+
+                console.log(bedJSON);
+                console.log(JSON.stringify(bedJSON, null, 2))
+
+                const objectLoader = new THREE.ObjectLoader();
+                const loadedBed = objectLoader.parse(bedJSON);
+
+                scene.add(loadedBed);
+
+
+            }, undefined, function (error) {
+
+                console.error("model loading error: ", error);
+
+            });
+
+            
+
             console.log("LAYOUT REQUEST WORKS!");
         }).catch((e) => {
             console.log(e);
@@ -126,6 +156,13 @@ const Editor = () => {
 
         lightD.target.position.set(0, 0, 0);
         scene.add(lightD.target);
+
+        const lightB = new THREE.DirectionalLight(0xffddee);
+        lightB.position.set(0, 0, 0);
+        scene.add(lightB);
+
+        lightB.target.position.set(10, 10, 10);
+        scene.add(lightB.target);
 
 
 

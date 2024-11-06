@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api'; // For now this is for when running backend on local machine (route setup on index.js), will need to change this when actually hosting server
+// const API_URL = 'http://localhost:5000/api'; // For now this is for when running backend on local machine (route setup on index.js), will need to change this when actually hosting server
+const API_URL = process.env.API_URL || 'http://localhost:5000/api';
+
 
 // Retrieve all layouts, use this for now
 export const getAllLayouts = async () => {
