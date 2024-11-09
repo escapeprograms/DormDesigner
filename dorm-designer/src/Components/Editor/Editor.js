@@ -26,6 +26,7 @@ const Editor = () => {
         group.rotateX(-Math.PI/2);
         
         let floor;
+        let floorVertices = [];
         let walls = [];
 
         //User interactions and events
@@ -109,15 +110,15 @@ const Editor = () => {
         //load floor
         axios.get('/api/layouts').then((data) => {
             console.log(data, "!!!!")
-            let vertices = data.data[3].vertices.map((v) => {
+            floorVertices = data.data[3].vertices.map((v) => {
                 return new THREE.Vector2(v[0], v[1]);
             });
             //vertices = await fetch("/")
-            vertices = vertices.map(v => {
+            floorVertices = floorVertices.map(v => {
                 return v.multiplyScalar(2)
             });
-            floor = getFloorMesh(vertices, 0xffffff);
-            walls = getWallMeshes(vertices, 0xddccbb, 2);
+            floor = getFloorMesh(floorVertices, 0xffffff);
+            walls = getWallMeshes(floorVertices, 0xddccbb, 2);
     
     
             const loader = new THREE.TextureLoader();
@@ -139,7 +140,7 @@ const Editor = () => {
         }).catch((e) => {
             console.log(e);
             console.log("LAYOUT FAIL")
-            let vertices = [
+            floorVertices = [
                 new THREE.Vector2(-3,-2.5),
                 new THREE.Vector2(0,-2.5),
                 new THREE.Vector2(0,-1.5),
@@ -163,11 +164,11 @@ const Editor = () => {
                 new THREE.Vector2(-3,-2.5)
             ];
             //vertices = await fetch("/")
-            vertices = vertices.map(v => {
+            floorVertices = floorVertices.map(v => {
                 return v.multiplyScalar(2)
             });
-            floor = getFloorMesh(vertices, 0xffffff);
-            walls = getWallMeshes(vertices, 0xddccbb, 2);
+            floor = getFloorMesh(floorVertices, 0xffffff);
+            walls = getWallMeshes(floorVertices, 0xddccbb, 2);
     
     
             const loader = new THREE.TextureLoader();
@@ -200,13 +201,13 @@ const Editor = () => {
         objects.push(new FloorItem("id2", new THREE.Mesh(testGeometry2, material2.clone()), [testFootprint2.clone()], 1));
         
         for (let i = 0; i < objects.length; i++) {
-            group.add(objects[i].footprints[0].mesh) // draw the footprint, comment this out once testing is done
+            group.add(objects[i].footprints[0].mesh) // draw the red footprint, comment this out once testing is done
             scene.add(objects[i].mesh); 
         }
         // objects[0].translate(new THREE.Vector3(2,0,2))
 
         
-        //rotate everything
+        //rotate everything by 90 deg
         scene.add(group);
         
         //lighting
@@ -221,13 +222,12 @@ const Editor = () => {
         lightD.target.position.set(0, 0, 0);
         scene.add(lightD.target);
 
+
+        //some basic transformations on DormItems
         objects[0].translate(new THREE.Vector3(-3,0,0.9))
-        
+        objects[1].translate(new THREE.Vector3(0,0,-1))
         objects[1].rotate(Math.PI/4)
-        
-        // objects[0].translate(new THREE.Vector3(2,0,2))
-        
-        // objects[0].footprints[0].updateMesh()
+
         const animate = () => {
             requestAnimationFrame(animate);
 
@@ -235,6 +235,12 @@ const Editor = () => {
             if (objects[0].checkCollision(objects[1])) {
                 console.log("collision!")
             }
+            for (let i = 0; i < objects.length; i ++) {
+                if (objects[i].checkWallCollisions(floorVertices)) {
+                    console.log("WALL collision")
+                }
+            }
+            
             controls.update();
             renderer.render(scene, camera);
         };

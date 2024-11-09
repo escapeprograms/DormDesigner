@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import _ from 'lodash';
 
 //cursed legacy code sent by the devil himself :)
+//NOTE: if collisions seem bugged, try refreshing the page and see if the issue is resolved.
 function lineLineCross(a,b,c,d){
     //line 1: endpoint1 [x,y], endpoint2 [x,y],line 2: endpoint1 [x,y], endpoint2 [x,y]
     var m1 = (b[1]-a[1])/(b[0]-a[0]);
@@ -39,7 +40,7 @@ class Footprint {
         this.angleOffsets = this.vertices.map(v => Math.atan2(v.y, v.x))
 
         this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({ color: 0xff0000 }));
-        this.mesh.translateZ(2)
+        this.mesh.translateZ(3);
         //rendering footprint
         this.updateMesh();
     }
@@ -128,7 +129,6 @@ class FloorItem extends DormObject {
                 let dist = this.footprints[i].dists[j];
                 let angle2 = this.footprints[i].angleOffsets[j];
 
-                
                 v[j].x = this.position.x + (Math.cos(this.rotation + angle2) * dist);
                 v[j].y = -this.position.z + (Math.sin(this.rotation + angle2) * dist);
             }
@@ -157,16 +157,24 @@ class FloorItem extends DormObject {
 
         //NOTE: When you move an object X, you must check collisions BOTH WAYS ex: Y.checkCollision(X) and X.checkCollision(Y) to account for LeggedItems
     }
-    checkWallCollisions(walls) {
-        //TODO: check if the footprint collides with the walls
-        // for (let i = 0; i < this.footprints.length; i++) {
-        //     for (let j = 0; j < floorItem.footprints.length; j++) {
-        //         if (this.footprints[i].checkCollision(floorItem.footprints[j])) {
-        //             return true;
-        //         }
-        //     }
-        // }
-        // return false;
+    checkWallCollisions(floorVertices) {
+        //check if the footprint collides with the walls
+        for (let i = 0; i < this.footprints.length; i++) {
+            let f = this.footprints[i];
+            for (let j = 0; j < f.vertices.length; j ++) {
+                for (let k = 0; k < floorVertices.length; k++) {
+                    let a = floorVertices[k];
+                    let b = floorVertices[(k+1)%floorVertices.length];
+                    let c = f.vertices[j];
+                    let d = f.vertices[(j+1)%f.vertices.length];
+                    if (lineLineCross([a.x, a.y], [b.x, b.y], [c.x, c.y], [d.x, d.y])) {
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        return false;
     }
 }
 
@@ -178,8 +186,22 @@ class LeggedItem extends FloorItem {
     }
 
     checkCollision(floorItem) {
-        super.checkCollision();
+        //check collision as normal
+        if (super.checkCollision(floorItem)) {
+            return true;
+        }
         //check y-height underneath a y-footprint
+        //WARMING: THIS CODE IS UNTESTED
+        if (floorItem.position.y + floorItem.height >= this.position.y + this.legHeight) {
+            //check with elevatedFootprint if floorItem is too tall
+            for (let j = 0; j < floorItem.footprints.length; j++) {
+                if (this.elevatedFootprint.checkCollision(floorItem.footprints[j])) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
 
@@ -192,4 +214,4 @@ class WallItem extends DormObject {
     }
 }
 
-export {Footprint, DormObject, FloorItem, WallItem} 
+export {Footprint, DormObject, FloorItem, LeggedItem, WallItem} 
