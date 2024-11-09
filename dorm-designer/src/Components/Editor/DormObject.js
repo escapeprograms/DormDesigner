@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-
+import _ from 'lodash';
 
 //cursed legacy code sent by the devil himself :)
 function lineLineCross(a,b,c,d){
@@ -35,14 +35,21 @@ function lineLineCross(a,b,c,d){
 class Footprint {
     constructor(vertices) {
         this.vertices = vertices; //array of Vector2
+        this.dists = this.vertices.map(v => Math.sqrt((v.x * v.x) + (v.y * v.y)))
+        this.angleOffsets = this.vertices.map(v => Math.atan2(v.y, v.x))
+
+        this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({ color: 0xff0000 }));
+        this.mesh.translateZ(2)
+        //rendering footprint
+        this.updateMesh();
     }
     checkCollision(footprint) { //collision detection with another footprint
-        for (let c = 0; c < footprint.vertices.length; c++){
-            for (let d = 0; d < this.vertices.length; d++){
-                let a = footprint.vertices[c];
-                let b = footprint.vertices[(c+1)%footprint.vertices.length];
-                let c = this.vertices[d];
-                let d = this.vertices[(d+1)%this.vertices.length];
+        for (let i = 0; i < footprint.vertices.length; i++){
+            for (let j = 0; j < this.vertices.length; j++){
+                let a = footprint.vertices[i];
+                let b = footprint.vertices[(i+1)%footprint.vertices.length];
+                let c = this.vertices[j];
+                let d = this.vertices[(j+1)%this.vertices.length];
                 let intersect = lineLineCross([a.x, a.y], [b.x, b.y], [c.x, c.y], [d.x, d.y]);
                 if (intersect){
                     return true;
@@ -51,6 +58,24 @@ class Footprint {
         }
         return false;
     }
+
+    updateMesh() {
+        this.shape = new THREE.Shape();
+        // this.vertices.forEach(v => this.shape.lineTo(v.x, v.z));
+
+        this.shape.moveTo(this.vertices[0].x, this.vertices[0].y)
+        for (let i = 1; i < this.vertices.length; i++) {
+            this.shape.lineTo(this.vertices[i].x, this.vertices[i].y)
+        }
+        this.shape.lineTo(this.vertices[0].x, this.vertices[0].y)
+
+        this.geometry = new THREE.ShapeGeometry(this.shape);
+        this.mesh.geometry = this.geometry;
+    }
+
+    clone() {
+        return new Footprint(this.vertices.map(v => new THREE.Vector2(v.x, v.y)))
+    }
 }
 
 
@@ -58,6 +83,7 @@ class DormObject {
     constructor (id, mesh) {
         this.id = id;
         this.mesh = mesh;
+        this.mesh.item = this;
     }
 }
 
@@ -70,50 +96,55 @@ class FloorItem extends DormObject {
         this.height = height; //max height of the object
     }
     select() {
-        this.mesh.material.color.set("red")
+        this.mesh.material.color.set("green")
     }
     deselect() {
         this.mesh.material.color.set("white")
     }
 
-    translate(delta) {
-        this.position.add(delta);
-        this.mesh.translateX(delta.x);
-        this.mesh.translateZ(delta.z);
+    translate(position) { //set the absolute position
+        this.position = position;
+        this.mesh.position.x = position.x;
+        this.mesh.position.y = position.y + this.height/2;
+        this.mesh.position.z = position.z;
 
-        //TODO: move all footprints
+        //translate footprints
         this.updateFootprints();
     }
-    updateFootprints() {
-        // Player.prototype.calcCorners = function(){
-        //     var verts = tankTypes[this.type].vertices;
-        //     for (var i = 0; i < verts.length; i++){
-        //       var len = Math.sqrt((verts[i][0])**2+(verts[i][1])**2);
-        //       var angle2 = Math.atan2(verts[i][1],verts[i][0]);
-        //       this.corners[i] = [this.pos[0]+(Math.cos(this.angle+angle2) * len), this.pos[1]+(Math.sin(this.angle+angle2) * len)];
-        //     }
-        //     //OLD corner positions
-        //     /*var len = Math.sqrt((playerDimensions[0]/2)**2+(playerDimensions[1]/2)**2);
-        //     var angle2 = Math.atan(playerDimensions[1]/playerDimensions[0]);
-            
-        //     this.corners[0] = [this.pos[0]+(Math.cos(this.angle-angle2) * len), this.pos[1]+(Math.sin(this.angle-angle2) * len)];
-        //     this.corners[1] = [this.pos[0]+(Math.cos(this.angle+angle2) * len), this.pos[1]+(Math.sin(this.angle+angle2) * len)];
-        //     this.corners[2] = [this.pos[0]+(Math.cos(Math.PI+this.angle-angle2) * len), this.pos[1]+(Math.sin(Math.PI+this.angle-angle2) * len)];
-        //     this.corners[3] = [this.pos[0]+(Math.cos(Math.PI+this.angle+angle2) * len), this.pos[1]+(Math.sin(Math.PI+this.angle+angle2) * len)];*/
-        //   }
+    
+    rotate(angle) { //set the absolute angle
+        this.rotation = angle;
+        this.mesh.rotation.y = angle;
+        //rotate footprints
+        this.updateFootprints();
     }
-    rotate(angle) {
-        this.rotation += angle;
 
-        //TODO: rotate all footprints around the centerx
+    updateFootprints() {
+        for (let i = 0; i < this.footprints.length; i++) {
+            let v = this.footprints[i].vertices;
+            let anchors = this.footprints[i].anchors;
+            for (let j = 0; j < v.length; j ++) {
+                //find anchor information
+                let dist = this.footprints[i].dists[j];
+                let angle2 = this.footprints[i].angleOffsets[j];
+
+                
+                v[j].x = this.position.x + (Math.cos(this.rotation + angle2) * dist);
+                v[j].y = -this.position.z + (Math.sin(this.rotation + angle2) * dist);
+            }
+
+            //update mesh
+            this.footprints[i].updateMesh();
+        }
     }
     
     checkCollision(floorItem) {
         //quick, dirty check first
-        let box1 = new THREE.Box3().setFromObject(this.mesh);
-        let box2 = new THREE.Box3().setFromObject(floorItem.mesh);
-        if (!box1.intersectsBox(box2)) return false;
-
+        // let box1 = new THREE.Box3().setFromObject(this.mesh);
+        // let box2 = new THREE.Box3().setFromObject(floorItem.mesh);
+        // if (!box1.intersectsBox(box2)) {
+        //     return false;
+        // }
         //check the collisions 2D footprints with all footprints of floorItem
         for (let i = 0; i < this.footprints.length; i++) {
             for (let j = 0; j < floorItem.footprints.length; j++) {
@@ -124,10 +155,18 @@ class FloorItem extends DormObject {
         }
         return false;
 
-        //NOTE: When you move an object X, you must check ALL OTHER OBJECTS' checkCollision(), not X's
+        //NOTE: When you move an object X, you must check collisions BOTH WAYS ex: Y.checkCollision(X) and X.checkCollision(Y) to account for LeggedItems
     }
     checkWallCollisions(walls) {
-        //check if the footprint collides with the walls
+        //TODO: check if the footprint collides with the walls
+        // for (let i = 0; i < this.footprints.length; i++) {
+        //     for (let j = 0; j < floorItem.footprints.length; j++) {
+        //         if (this.footprints[i].checkCollision(floorItem.footprints[j])) {
+        //             return true;
+        //         }
+        //     }
+        // }
+        // return false;
     }
 }
 
@@ -153,4 +192,4 @@ class WallItem extends DormObject {
     }
 }
 
-export {DormObject, FloorItem, WallItem} 
+export {Footprint, DormObject, FloorItem, WallItem} 

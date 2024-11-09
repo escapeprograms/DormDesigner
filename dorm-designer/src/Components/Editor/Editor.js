@@ -3,7 +3,8 @@ import * as THREE from 'three';
 import axios from 'axios'; 
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
 import {getFloorMesh, getWallMeshes} from './three-objects/floor';
-import { DormObject, FloorItem } from './DormObject';
+import { Footprint, DormObject, FloorItem } from './DormObject';
+import _ from 'lodash'
 
 const Editor = () => {
     const mountRef = useRef(null);
@@ -24,10 +25,24 @@ const Editor = () => {
         const group = new THREE.Group();
         group.rotateX(-Math.PI/2);
         
-        //ray casting
-        const raycaster = new THREE.Raycaster();
+        let floor;
+        let walls = [];
+
+        //User interactions and events
         let hoverSelection = null; //current mouse hover selection
-        function getSelection(event) {
+        let clickSelection = null; //currently selected object
+        let movingObject = false; //is the user moving an object?
+        let mouseDown = false;
+        
+        function setMouseDown(event) {
+            mouseDown = true;
+        }
+        function setMouseUp(event) {
+            mouseDown = false;
+        }
+
+        const raycaster = new THREE.Raycaster();
+        function getHoverSelection(event) {
             const mouse = new THREE.Vector2();
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -40,12 +55,52 @@ const Editor = () => {
           
             // Check if the first intersected object is your cube
             if (intersects.length > 0) {
-                hoverSelection = intersects[0].object;
+                hoverSelection = intersects[0].object.item; //the .item is a special property to give back the related DormObject
             }
             else {
                 hoverSelection = null;
             }
-          }
+        }
+
+        function getClickSelection(event) {
+            if (clickSelection) clickSelection.deselect();
+            clickSelection = hoverSelection;
+            if (clickSelection) clickSelection.select();
+            console.log("CLICKED SELECTION: ", clickSelection);
+        }
+
+        function dragSelection(event) {
+            controls.enabled = true;
+
+            if (clickSelection && mouseDown) {
+                controls.enabled = false; //disable camera controls while dragging
+
+                const mouse = new THREE.Vector2();
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+                // Update the raycaster's origin and direction
+                raycaster.setFromCamera(mouse, camera);
+                
+                //intersect ray with the floor
+                const intersects = raycaster.intersectObjects([floor]);
+
+                if (intersects.length > 0) {
+                    let intersection = intersects[0].point;
+                    clickSelection.translate(intersection);
+                }
+            }
+        }
+
+        //event listeners
+        window.addEventListener('mousemove', getHoverSelection);
+        window.addEventListener('mousedown', getClickSelection);
+        window.addEventListener('mousemove', dragSelection);
+        
+        window.addEventListener('mousedown', setMouseDown);
+        window.addEventListener('mouseup', setMouseUp);
+
+        /////////
 
         const material2 = new THREE.MeshLambertMaterial({ color: 0xffff00 });
         
@@ -61,8 +116,8 @@ const Editor = () => {
             vertices = vertices.map(v => {
                 return v.multiplyScalar(2)
             });
-            const floor = getFloorMesh(vertices, 0xffffff);
-            const walls = getWallMeshes(vertices, 0xddccbb, 2);
+            floor = getFloorMesh(vertices, 0xffffff);
+            walls = getWallMeshes(vertices, 0xddccbb, 2);
     
     
             const loader = new THREE.TextureLoader();
@@ -111,8 +166,8 @@ const Editor = () => {
             vertices = vertices.map(v => {
                 return v.multiplyScalar(2)
             });
-            const floor = getFloorMesh(vertices, 0xffffff);
-            const walls = getWallMeshes(vertices, 0xddccbb, 2);
+            floor = getFloorMesh(vertices, 0xffffff);
+            walls = getWallMeshes(vertices, 0xddccbb, 2);
     
     
             const loader = new THREE.TextureLoader();
@@ -133,14 +188,22 @@ const Editor = () => {
         });
 
         //load objects
+        //NOTE: These Objects are all for testing and demonstration purposes
+        //When creating a new DormObject of any kind, please ensure that the geometry, material, and footprint are all CLONED to avoid pointer errors
         let objects = [];
-        let testGeometry = new THREE.BoxGeometry(1,1,1);
-        let testFootprint =  [new THREE.Vector2(0,0), new THREE.Vector2(1,0), new THREE.Vector2(1,1), new THREE.Vector2(0,1)];
+        let testGeometry = new THREE.BoxGeometry(1,1.5,1);
+        let testGeometry2 = new THREE.BoxGeometry(3,1,1);
+        let testFootprint =  new Footprint([new THREE.Vector2(-0.5,-0.5), new THREE.Vector2(-0.5,0.5), new THREE.Vector2(0.5,0.5), new THREE.Vector2(0.5,-0.5)]);
+        let testFootprint2 =  new Footprint([new THREE.Vector2(-1.5,-0.5), new THREE.Vector2(-1.5,0.5), new THREE.Vector2(1.5,0.5), new THREE.Vector2(1.5,-0.5)]);
 
-        objects.push(new FloorItem("id", new THREE.Mesh(testGeometry, material2), [testFootprint]));
-
-        scene.add(objects[0].mesh);
-        window.addEventListener('mousemove', getSelection);
+        objects.push(new FloorItem("id", new THREE.Mesh(testGeometry, material2.clone()), [testFootprint.clone()], 1.5));
+        objects.push(new FloorItem("id2", new THREE.Mesh(testGeometry2, material2.clone()), [testFootprint2.clone()], 1));
+        
+        for (let i = 0; i < objects.length; i++) {
+            group.add(objects[i].footprints[0].mesh) // draw the footprint, comment this out once testing is done
+            scene.add(objects[i].mesh); 
+        }
+        // objects[0].translate(new THREE.Vector3(2,0,2))
 
         
         //rotate everything
@@ -158,14 +221,19 @@ const Editor = () => {
         lightD.target.position.set(0, 0, 0);
         scene.add(lightD.target);
 
-
-
+        objects[0].translate(new THREE.Vector3(-3,0,0.9))
+        
+        objects[1].rotate(Math.PI/4)
+        
+        // objects[0].translate(new THREE.Vector3(2,0,2))
+        
+        // objects[0].footprints[0].updateMesh()
         const animate = () => {
             requestAnimationFrame(animate);
-            //get selection
-            if (hoverSelection) {
-                console.log(hoverSelection);
-                hoverSelection.material.color.set("red");
+
+            // test code for demonstrating colliding
+            if (objects[0].checkCollision(objects[1])) {
+                console.log("collision!")
             }
             controls.update();
             renderer.render(scene, camera);
