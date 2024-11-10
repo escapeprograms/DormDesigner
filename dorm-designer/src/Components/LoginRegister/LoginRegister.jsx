@@ -21,8 +21,8 @@ const LoginRegister = () => {
       </div>
       </div>
       <div className ="submit-container">
-        <div className = "submit"><Link to = "/editor">Login</Link></div>
-        <div className = "submit"><Link to = "/editor">Register</Link></div>
+        <div className = "submit"><Link to = "/dashboard">Login</Link></div>
+        <div className = "submit"><Link to = "/dashboard">Register</Link></div>
       </div>
     </div>
   )
