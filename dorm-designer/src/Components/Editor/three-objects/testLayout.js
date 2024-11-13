@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import bedJSON from './bedModel.json';
 import deskJSON from './deskModel.json';
+import dresserJSON from './dresserModel.json';
 import {Footprint, DormObject, FloorItem, DormDesign, DormLayout} from "../DormObject.js";
 import {getFloorMesh, getWallMeshes} from './floor';
 
@@ -39,6 +40,19 @@ const databaseLayoutObject = {
                 [0, 0]
             ],
             mesh: deskJSON
+        },
+        {
+            id: "id3",
+            position: {x:100, y:0, z:0},
+            rotation: Math.PI,
+            footprints: [
+                [0, 0],
+                [1, 0],
+                [1, 1],
+                [0, 1],
+                [0, 0]
+            ],
+            mesh: dresserJSON
         }
     ],
 }
