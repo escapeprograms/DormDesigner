@@ -139,7 +139,7 @@ const Editor = () => {
 
         for (let i = 0; i < objects.length; i++) {
             group.add(objects[i].footprints[0].mesh) // draw the red footprint, comment this out once testing is done
-            // console.log("footprint", objects[i].footprints);
+            scene.add(objects[i].selectionMesh)
             scene.add(objects[i].mesh); 
         }
         
@@ -171,12 +171,13 @@ const Editor = () => {
             requestAnimationFrame(animate);
 
             for (let i = 0; i < objects.length; i ++) {
+                objects[i].setValid();
                 if (objects[i].checkWallCollisions(testDesign.floorVertices)) {
-                    console.log("WALL collision")
+                    objects[i].setInvalid();
                 }
                 for(let j=0; j<objects.length; j++) {
                     if(j !== i && objects[i].checkCollision(objects[j])) {
-                        console.log("collision!")
+                        objects[i].setInvalid();
                     }
                 }
             }

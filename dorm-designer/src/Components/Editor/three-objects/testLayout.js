@@ -16,7 +16,7 @@ const databaseLayoutObject = {
     defaultFurniture: [
         {
             id: "id1",
-            position: {x:0, y:0, z:0},
+            position: {x:10, y:0, z:-10},
             rotation: 0,
             footprints: [
                 [0, 0],

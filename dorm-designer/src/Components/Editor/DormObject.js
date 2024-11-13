@@ -84,9 +84,51 @@ class DormObject {
     constructor (id, mesh) {
         this.id = id;
         this.mesh = mesh;
-        // this.mesh.item = this;
+
+        //selection outline
+        this.isSelected = false;
+        this.selectionMesh = this.mesh.clone();
+        this.selectionMesh.traverse((node) => {
+            node.material = new THREE.MeshBasicMaterial({color:"green", wireframe:true});
+        });
+        this.selectionMesh.visible = false;
+
+        //save each geometry's original material
+        this.valid = true;
+        this.regularMaterials = [];
+        this.mesh.traverse((node) => {
+            this.regularMaterials.push(node.material);
+        });
+        this.invalidMaterial = new THREE.MeshBasicMaterial({color:"red", transparent:true, opacity:0.5})
+
+        //link meshes back to the DormObject
         this.mesh.traverse((node) => {
             node.item = this;
+        });
+    }
+
+    select() {
+        this.isSelected = true;
+        this.selectionMesh.visible = true;
+    }
+    deselect() {
+        this.isSelected = false;
+        this.selectionMesh.visible = false;
+    }
+
+    //give feedback on whether it is valid/invald
+    setInvalid() {
+        this.valid = false;
+        this.mesh.traverse((node) => {
+            node.material = this.invalidMaterial;
+        });
+    }
+    setValid() {
+        this.valid = true;
+        let i = 0;
+        this.mesh.traverse((node) => {
+            node.material = this.regularMaterials[i];
+            i++;
         });
     }
 }
@@ -100,18 +142,17 @@ class FloorItem extends DormObject {
         this.footprints = footprints; //an array of Footprint that could collide with other footprints
         this.height = height; //max height of the object
     }
-    select() {
-        // this.mesh.material.color.set("green")
-    }
-    deselect() {
-        // this.mesh.material.color.set("white")
-    }
+
 
     translate(position) { //set the absolute position
         this.position = position;
         this.mesh.position.x = position.x;
         this.mesh.position.y = position.y;
         this.mesh.position.z = position.z;
+
+        this.selectionMesh.position.x = position.x;
+        this.selectionMesh.position.y = position.y;
+        this.selectionMesh.position.z = position.z;
 
         //translate footprints
         this.updateFootprints();
@@ -120,6 +161,9 @@ class FloorItem extends DormObject {
     rotate(angle) { //set the absolute angle
         this.rotation = angle;
         this.mesh.rotation.y = angle;
+
+        this.selectionMesh.rotation.y = angle;
+        
         //rotate footprints
         this.updateFootprints();
     }
