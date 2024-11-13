@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.74099bbc.css",
-    "main.js": "/static/js/main.454051aa.js",
+    "main.css": "/static/css/main.fb0ad077.css",
+    "main.js": "/static/js/main.727a831a.js",
     "static/media/UMass Logo.png": "/static/media/UMass Logo.d9dc627b68a9ae54da29.png",
     "index.html": "/index.html",
-    "main.74099bbc.css.map": "/static/css/main.74099bbc.css.map",
-    "main.454051aa.js.map": "/static/js/main.454051aa.js.map"
+    "main.fb0ad077.css.map": "/static/css/main.fb0ad077.css.map",
+    "main.727a831a.js.map": "/static/js/main.727a831a.js.map"
   },
   "entrypoints": [
-    "static/css/main.74099bbc.css",
-    "static/js/main.454051aa.js"
+    "static/css/main.fb0ad077.css",
+    "static/js/main.727a831a.js"
   ]
 }

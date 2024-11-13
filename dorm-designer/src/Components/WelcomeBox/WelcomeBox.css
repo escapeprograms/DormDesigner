@@ -9,21 +9,31 @@
   }
   
   .welcome-text {
-    color: red;
+    color:#6C0002;
     font-size: 24px;
     margin-bottom: 20px;
+  }
+  
+  .signed-out {
+    padding: 20px;
+    background-color: #f8f9fa; 
+    text-align: center;
   }
   
   .sign-in-button {
     padding: 10px 20px;
     font-size: 16px;
     color: white;
-    background-color: #007bff; /* Bootstrap blue color or any preferred color */
+    background-color: #6C0002; 
     border: none;
     border-radius: 4px;
     cursor: pointer;
   }
   
-  .sign-in-button:hover {
-    background-color: #0056b3; /* Slightly darker blue for hover effect */
+  .signed-in {
+    padding: 20px;
+    background-color: #6C0002;
+    text-align: center;
   }
+  
+  
