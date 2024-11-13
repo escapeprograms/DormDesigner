@@ -177,6 +177,25 @@ const Editor = () => {
     return (
         <div ref={mountRef}>
             {showPopup && <ControlsPopup onClose={() => setShowPopup(false)} />}
+            <button 
+                onClick={() => setShowPopup(true)} 
+                style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '40px',
+                    height: '40px',
+                    fontSize: '20px',
+                    cursor: 'pointer',
+                    zIndex: 1000,
+                }}
+            >
+                ?
+            </button>
         </div>
     );
 };
