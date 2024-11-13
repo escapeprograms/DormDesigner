@@ -1,0 +1,29 @@
+.WelcomeBox {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+    margin: 50px auto; /* Centers the box on the page */
+  }
+  
+  .welcome-text {
+    color: red;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .sign-in-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff; /* Bootstrap blue color or any preferred color */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .sign-in-button:hover {
+    background-color: #0056b3; /* Slightly darker blue for hover effect */
+  }
