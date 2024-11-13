@@ -7,11 +7,13 @@ import { Footprint, DormObject, FloorItem } from './DormObject';
 import _ from 'lodash'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import testDesign from './three-objects/testDesign.js';
+import print from './printJSON.js';
 
 const Editor = () => {
     const mountRef = useRef(null);
 
     useEffect(() => {
+        // print();
         const renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.shadowMap.enabled = true;
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -127,6 +129,14 @@ const Editor = () => {
             }
         }
 
+        function rotateSelection(event) {
+            controls.enabled = true;
+            console.log("rotate this object", clickSelection);
+            if(event.key === "ArrowLeft") {
+                clickSelection.rotate(clickSelection.rotation + 15*Math.PI/180);
+            }
+        }
+
         //event listeners
         window.addEventListener('mousemove', getHoverSelection);
         window.addEventListener('mousedown', getClickSelection);
@@ -134,6 +144,8 @@ const Editor = () => {
         
         window.addEventListener('mousedown', setMouseDown);
         window.addEventListener('mouseup', setMouseUp);
+
+        window.addEventListener('keydown', rotateSelection);
 
         /////////
 
