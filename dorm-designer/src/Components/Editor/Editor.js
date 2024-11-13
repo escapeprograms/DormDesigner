@@ -5,34 +5,66 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
 import {getFloorMesh, getWallMeshes} from './three-objects/floor';
 import { Footprint, DormObject, FloorItem } from './DormObject';
 import _ from 'lodash'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import testDesign from './three-objects/testDesign.js';
 
 const Editor = () => {
     const mountRef = useRef(null);
 
     useEffect(() => {
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set( 0, 5, 15 );
-        const renderer = new THREE.WebGLRenderer();
-
-        scene.background = new THREE.Color(0xdddddd);
-
+        const renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.shadowMap.enabled = true;
         renderer.setSize(window.innerWidth, window.innerHeight);
         mountRef.current.appendChild(renderer.domElement);
 
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xaaaaaa);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        
         const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enabled = false;
+        camera.position.set(84, 300, 50);
+        controls.target.set(84, 0, -84);
+        controls.update();
 
         const group = new THREE.Group();
         group.rotateX(-Math.PI/2);
+
+        const axesHelper = new THREE.AxesHelper( 100 );
+        scene.add(axesHelper);
         
+        camera.position.set(84, 84, 84);
+        const target = new THREE.Vector3(40, 0, -40);
+        camera.lookAt(target);
+
         let floor;
-        let floorVertices = [];
-        let walls = [];
+
+        // const material3 = new THREE.MeshPhongMaterial({ color: 0xffffaa });
+        // const plane = new THREE.PlaneGeometry(100, 100);
+        // floor = new THREE.Mesh(plane, material3);
+        // group.add(floor);
+
+        // ----------------------------------------------------------
+        
+        let objects = [];
+        console.log(testDesign.currentFurniture);
+        floor = testDesign.layout.floor;
+        group.add(floor);
+        group.add(...testDesign.layout.walls);
+        const furniture = testDesign.currentFurniture;
+        console.log(furniture[0]);
+        for(let i=0; i<furniture.length; i++) {
+            objects.push(furniture[i]);
+            console.log("this furniture", furniture[i]);
+            scene.add(furniture[i].mesh);
+        }
+        
+
 
         //User interactions and events
         let hoverSelection = null; //current mouse hover selection
         let clickSelection = null; //currently selected object
-        let movingObject = false; //is the user moving an object?
         let mouseDown = false;
         
         function setMouseDown(event) {
@@ -67,8 +99,10 @@ const Editor = () => {
             if (clickSelection) clickSelection.deselect();
             clickSelection = hoverSelection;
             if (clickSelection) clickSelection.select();
-            console.log("CLICKED SELECTION: ", clickSelection);
+            // console.log("CLICKED SELECTION: ", clickSelection);
         }
+
+        controls.enabled = false;
 
         function dragSelection(event) {
             controls.enabled = true;
@@ -103,142 +137,62 @@ const Editor = () => {
 
         /////////
 
-        const material2 = new THREE.MeshLambertMaterial({ color: 0xffff00 });
-        
-
-
-        //load floor
-        axios.get('/api/layouts').then((data) => {
-            console.log(data, "!!!!")
-            floorVertices = data.data[3].vertices.map((v) => {
-                return new THREE.Vector2(v[0], v[1]);
-            });
-            //vertices = await fetch("/")
-            floorVertices = floorVertices.map(v => {
-                return v.multiplyScalar(2)
-            });
-            floor = getFloorMesh(floorVertices, 0xffffff);
-            walls = getWallMeshes(floorVertices, 0xddccbb, 2);
-    
-    
-            const loader = new THREE.TextureLoader();
-    
-            loader.load(`${process.env.PUBLIC_URL}/wood_texture.jpg`, (texture) => {
-                texture.wrapS = THREE.RepeatWrapping;
-                texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(0.05, 0.05);
-                texture.offset.set(0.8, 0.8);
-                const material = new THREE.MeshPhongMaterial({map: texture});
-                floor.material = material;
-                group.add(floor);
-                console.log("changing material");
-                renderer.render(scene, camera);
-            });
-    
-            walls.forEach((wall) => group.add(wall));
-            console.log("LAYOUT REQUEST WORKS!");
-        }).catch((e) => {
-            console.log(e);
-            console.log("LAYOUT FAIL")
-            floorVertices = [
-                new THREE.Vector2(-3,-2.5),
-                new THREE.Vector2(0,-2.5),
-                new THREE.Vector2(0,-1.5),
-                new THREE.Vector2(2,-1.5),
-                new THREE.Vector2(2,-2.5),
-                new THREE.Vector2(3,-2.5),
-                new THREE.Vector2(3,1.5),
-                new THREE.Vector2(2,1.5),
-                new THREE.Vector2(2,2.5),
-                new THREE.Vector2(-2,2.5),
-                new THREE.Vector2(-2,1.5),
-                new THREE.Vector2(-3,1.5),
-                new THREE.Vector2(-3,1),
-                new THREE.Vector2(-4,1),
-                new THREE.Vector2(-4,0),
-                new THREE.Vector2(-3,0),
-                new THREE.Vector2(-3,-1),
-                new THREE.Vector2(-4,-1),
-                new THREE.Vector2(-4,-2),
-                new THREE.Vector2(-3,-2),
-                new THREE.Vector2(-3,-2.5)
-            ];
-            //vertices = await fetch("/")
-            floorVertices = floorVertices.map(v => {
-                return v.multiplyScalar(2)
-            });
-            floor = getFloorMesh(floorVertices, 0xffffff);
-            walls = getWallMeshes(floorVertices, 0xddccbb, 2);
-    
-    
-            const loader = new THREE.TextureLoader();
-    
-            loader.load(`${process.env.PUBLIC_URL}/wood_texture.jpg`, (texture) => {
-                texture.wrapS = THREE.RepeatWrapping;
-                texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(0.05, 0.05);
-                texture.offset.set(0.8, 0.8);
-                const material = new THREE.MeshPhongMaterial({map: texture});
-                floor.material = material;
-                group.add(floor);
-                console.log("changing material");
-                renderer.render(scene, camera);
-            });
-    
-            walls.forEach((wall) => group.add(wall));
-        });
 
         //load objects
         //NOTE: These Objects are all for testing and demonstration purposes
         //When creating a new DormObject of any kind, please ensure that the geometry, material, and footprint are all CLONED to avoid pointer errors
-        let objects = [];
-        let testGeometry = new THREE.BoxGeometry(1,1.5,1);
-        let testGeometry2 = new THREE.BoxGeometry(3,1,1);
-        let testFootprint =  new Footprint([new THREE.Vector2(-0.5,-0.5), new THREE.Vector2(-0.5,0.5), new THREE.Vector2(0.5,0.5), new THREE.Vector2(0.5,-0.5)]);
-        let testFootprint2 =  new Footprint([new THREE.Vector2(-1.5,-0.5), new THREE.Vector2(-1.5,0.5), new THREE.Vector2(1.5,0.5), new THREE.Vector2(1.5,-0.5)]);
+        // let objects = [];
+        let testGeometry = new THREE.BoxGeometry(50,50,20);
+        let testGeometry2 = new THREE.BoxGeometry(60,10,10);
+        let testFootprint =  new Footprint([new THREE.Vector2(-25,-10), new THREE.Vector2(-25,10), new THREE.Vector2(25,10), new THREE.Vector2(25, -10)]);
+        let testFootprint2 =  new Footprint([new THREE.Vector2(-30,-5), new THREE.Vector2(-30,5), new THREE.Vector2(30,5), new THREE.Vector2(30, 5)]);
 
+        const material2 = new THREE.MeshLambertMaterial({ color: 0xffff00 });
         objects.push(new FloorItem("id", new THREE.Mesh(testGeometry, material2.clone()), [testFootprint.clone()], 1.5));
         objects.push(new FloorItem("id2", new THREE.Mesh(testGeometry2, material2.clone()), [testFootprint2.clone()], 1));
         
         for (let i = 0; i < objects.length; i++) {
             group.add(objects[i].footprints[0].mesh) // draw the red footprint, comment this out once testing is done
+            // console.log("footprint", objects[i].footprints);
             scene.add(objects[i].mesh); 
         }
-        // objects[0].translate(new THREE.Vector3(2,0,2))
-
         
         //rotate everything by 90 deg
         scene.add(group);
         
         //lighting
-
-        const light = new THREE.AmbientLight(0xffffff, 1);
+        const light = new THREE.AmbientLight(0xffffff, 0.7);
         scene.add(light);
 
-        const lightD = new THREE.DirectionalLight(0xffddee);
-        lightD.position.set(3, 3, 3);
+        const lightD = new THREE.DirectionalLight(0xffddee, 1);
+        lightD.castShadow = true;
+        const lightHelper = new THREE.DirectionalLightHelper(lightD, 10, 0xff0000);
+        scene.add(lightHelper);
+
+        lightD.position.set(50, 100, -50);
         scene.add(lightD);
 
-        lightD.target.position.set(0, 0, 0);
+        lightD.target.position.set(20, 0, -20);
         scene.add(lightD.target);
 
+        const arrowDirection = new THREE.Vector3();
+        arrowDirection.subVectors(lightD.target.position, lightD.position).normalize();
+        const arrowHelper = new THREE.ArrowHelper(arrowDirection, lightD.position, 20, 0x00ff00); // Length 20, color green
+        scene.add(arrowHelper);
 
-        //some basic transformations on DormItems
-        objects[0].translate(new THREE.Vector3(-3,0,0.9))
-        objects[1].translate(new THREE.Vector3(0,0,-1))
-        objects[1].rotate(Math.PI/4)
 
         const animate = () => {
             requestAnimationFrame(animate);
 
-            // test code for demonstrating colliding
-            if (objects[0].checkCollision(objects[1])) {
-                console.log("collision!")
-            }
             for (let i = 0; i < objects.length; i ++) {
-                if (objects[i].checkWallCollisions(floorVertices)) {
-                    console.log("WALL collision")
-                }
+                // if (objects[i].checkWallCollisions(floorVertices)) {
+                    // console.log("WALL collision")
+                // }
+                // for(let j=0; j<objects.length; j++) {
+                //     if(j !== i && objects[i].checkCollision(objects[j])) {
+                //         console.log("collision!")
+                //     }
+                // }
             }
             
             controls.update();

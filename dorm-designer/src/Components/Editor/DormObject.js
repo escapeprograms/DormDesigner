@@ -40,7 +40,7 @@ class Footprint {
         this.angleOffsets = this.vertices.map(v => Math.atan2(v.y, v.x))
 
         this.mesh = new THREE.Mesh(this.geometry, new THREE.MeshBasicMaterial({ color: 0xff0000 }));
-        this.mesh.translateZ(3);
+        this.mesh.translateZ(50);
         //rendering footprint
         this.updateMesh();
     }
@@ -84,9 +84,13 @@ class DormObject {
     constructor (id, mesh) {
         this.id = id;
         this.mesh = mesh;
-        this.mesh.item = this;
+        // this.mesh.item = this;
+        this.mesh.traverse((node) => {
+            node.item = this;
+        });
     }
 }
+
 
 class FloorItem extends DormObject {
     constructor (id, mesh, footprints, height) {
@@ -97,16 +101,16 @@ class FloorItem extends DormObject {
         this.height = height; //max height of the object
     }
     select() {
-        this.mesh.material.color.set("green")
+        // this.mesh.material.color.set("green")
     }
     deselect() {
-        this.mesh.material.color.set("white")
+        // this.mesh.material.color.set("white")
     }
 
     translate(position) { //set the absolute position
         this.position = position;
         this.mesh.position.x = position.x;
-        this.mesh.position.y = position.y + this.height/2;
+        this.mesh.position.y = position.y;
         this.mesh.position.z = position.z;
 
         //translate footprints
@@ -214,4 +218,25 @@ class WallItem extends DormObject {
     }
 }
 
-export {Footprint, DormObject, FloorItem, LeggedItem, WallItem} 
+class DormLayout {
+    constructor (floorVertices, walls, floor, defaultFurniture) {
+        this.floorVertices = floorVertices;
+        this.walls = walls;
+        this.floor = floor;
+        this.defaultFurniture = defaultFurniture;   
+    }
+
+    static createFromPlain(plainLayout) {
+        
+    }
+}
+
+class DormDesign {
+    constructor (layout, currentFurniture) {
+        this.layout = layout; //DormLayout object
+        this.currentFurniture = currentFurniture;
+    }
+}
+
+
+export {Footprint, DormObject, FloorItem, LeggedItem, WallItem, DormDesign, DormLayout} 
