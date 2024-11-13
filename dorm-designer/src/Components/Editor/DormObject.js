@@ -232,7 +232,8 @@ class DormLayout {
 }
 
 class DormDesign {
-    constructor (layout, currentFurniture) {
+    constructor (floorVertices, layout, currentFurniture) {
+        this.floorVertices = floorVertices;
         this.layout = layout; //DormLayout object
         this.currentFurniture = currentFurniture;
     }

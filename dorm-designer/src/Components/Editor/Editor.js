@@ -137,20 +137,6 @@ const Editor = () => {
 
         /////////
 
-
-        //load objects
-        //NOTE: These Objects are all for testing and demonstration purposes
-        //When creating a new DormObject of any kind, please ensure that the geometry, material, and footprint are all CLONED to avoid pointer errors
-        // let objects = [];
-        let testGeometry = new THREE.BoxGeometry(50,50,20);
-        let testGeometry2 = new THREE.BoxGeometry(60,10,10);
-        let testFootprint =  new Footprint([new THREE.Vector2(-25,-10), new THREE.Vector2(-25,10), new THREE.Vector2(25,10), new THREE.Vector2(25, -10)]);
-        let testFootprint2 =  new Footprint([new THREE.Vector2(-30,-5), new THREE.Vector2(-30,5), new THREE.Vector2(30,5), new THREE.Vector2(30, 5)]);
-
-        const material2 = new THREE.MeshLambertMaterial({ color: 0xffff00 });
-        objects.push(new FloorItem("id", new THREE.Mesh(testGeometry, material2.clone()), [testFootprint.clone()], 1.5));
-        objects.push(new FloorItem("id2", new THREE.Mesh(testGeometry2, material2.clone()), [testFootprint2.clone()], 1));
-        
         for (let i = 0; i < objects.length; i++) {
             group.add(objects[i].footprints[0].mesh) // draw the red footprint, comment this out once testing is done
             // console.log("footprint", objects[i].footprints);
@@ -185,14 +171,14 @@ const Editor = () => {
             requestAnimationFrame(animate);
 
             for (let i = 0; i < objects.length; i ++) {
-                // if (objects[i].checkWallCollisions(floorVertices)) {
-                    // console.log("WALL collision")
-                // }
-                // for(let j=0; j<objects.length; j++) {
-                //     if(j !== i && objects[i].checkCollision(objects[j])) {
-                //         console.log("collision!")
-                //     }
-                // }
+                if (objects[i].checkWallCollisions(testDesign.floorVertices)) {
+                    console.log("WALL collision")
+                }
+                for(let j=0; j<objects.length; j++) {
+                    if(j !== i && objects[i].checkCollision(objects[j])) {
+                        console.log("collision!")
+                    }
+                }
             }
             
             controls.update();
