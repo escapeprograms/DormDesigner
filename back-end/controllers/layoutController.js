@@ -1,10 +1,9 @@
 import express from 'express';
-import LayoutManager from './managers/LayoutManager.js';
+import LayoutManager from '../managers/layoutManager.js';
 
 const router = express.Router();
 const layoutManager = new LayoutManager();
 
-// GET layout by ID
 router.get('/:id', async (req, res) => {
     try {
         const layout = await layoutManager.getLayoutById(req.params.id);
@@ -15,7 +14,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// POST new layout
 router.post('/', async (req, res) => {
     try {
         const newLayout = await layoutManager.createLayout(req.body);
@@ -25,7 +23,16 @@ router.post('/', async (req, res) => {
     }
 });
 
-// DELETE layout by ID
+router.put('/:id', async (req, res) => {
+    try {
+        const updatedLayout = await layoutManager.updateLayoutById(req.params.id, req.body);
+        if (!updatedLayout) return res.status(404).json({ message: "Layout not found" });
+        res.json(updatedLayout);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 router.delete('/:id', async (req, res) => {
     try {
         const deletedLayout = await layoutManager.deleteLayoutById(req.params.id);
@@ -35,16 +42,5 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
-// GET ALL Layouts, will use this clientside for now
-router.get('/layouts', async (req, res) => {
-    try {
-        const layout = await layoutManager.getAllLayouts();
-        if (!layout) return res.status(404).json({ message: "Layouts not found" });
-        res.json(layout);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
- });
 
 export default router;

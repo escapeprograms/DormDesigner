@@ -9,14 +9,6 @@ class LayoutManager {
         }
     }
 
-    async getAllLayouts() {
-        try {
-            return await Layout.find(); 
-        } catch (error) {
-            throw new Error("Failed to retrieve layouts");
-        }
-    }
-
     async createLayout(data) {
         const newLayout = new Layout(data);
         return await newLayout.save(); 

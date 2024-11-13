@@ -1,11 +1,13 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
 import express from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import 'dotenv/config';
+import dotenv from 'dotenv';
 
-const uri = process.env.MONGO_URL; 
+dotenv.config()
+// const uri = process.env.MONGO_URL; 
+
+const uri = "mongodb+srv://ananyakoduru22:wJJdnMfiXTaPEyFs@cluster0.pjmeg.mongodb.net/dormDesigner?retryWrites=true&w=majority"
 
 async function startServer() {
   try {
@@ -16,13 +18,17 @@ async function startServer() {
     const __dirname = path.dirname(__filename);
 
     const layoutController = (await import('./controllers/layoutController.js')).default;
+    const designController = (await import('./controllers/designController.js')).default;
+    const itemController = (await import('./controllers/itemController.js')).default;
 
     
     const app = express();
     app.use(express.json()); 
     const PORT = process.env.PORT || 3000;
 
-    app.use('/api', layoutController);
+    app.use('/api/layout', layoutController);
+    app.use('/api/items', itemController);
+    app.use('/api/design', designController);
     app.use(express.static(path.join(__dirname, '../dorm-designer/build')));
     
     app.get('*', (req, res) => {
@@ -33,16 +39,8 @@ async function startServer() {
       console.log(`Server running on http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+    console.error("Error starting server:", error);
   }
 }
 
-// Register the layout controller under the /api route
-app.use('/api', layoutController(client));
-
-app.listen(PORT, async () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-  await connectDB(); 
-});
-
-
+startServer();
