@@ -1,34 +1,46 @@
 import Design from '../models/designModel.js';
 
 class DesignManager {
-    async getDesignByUserId(id) {
+    async getDesignsByUserId(userId) {
         try {
-            return await Design.findById(id);
+            return await Design.find({ userId: userId });
         } catch (error) {
-            throw new Error("Design not found");
+            throw new Error("Designs not found for the given UserId");
         }
     }
 
     async createDesign(data) {
         const newDesign = new Design(data);
-        return await newDesign.save(); 
+        return await newDesign.save();
     }
 
-    async updateDesignByUserId(id, data) {
+    async updateDesignById(id, data) {
         try {
             return await Design.findByIdAndUpdate(id, data, { new: true });
         } catch (error) {
-            throw new Error("Failed to update Design");
+            throw new Error("Failed to update Design with the given _id");
         }
     }
 
-    async deleteDesignByUserId(id) {
-        return await Design.findByIdAndDelete(id);
+    async deleteDesignById(id) {
+        try {
+            return await Design.findByIdAndDelete(id);
+        } catch (error) {
+            throw new Error("Failed to delete Design with the given _id");
+        }
+    }
+
+    async deleteDesignsByUserId(userId) {
+        try {
+            return await Design.deleteMany({ userId: userId });
+        } catch (error) {
+            throw new Error("Failed to delete designs for the given UserId");
+        }
     }
 
     async deleteAllDesigns() {
         try {
-            return await Design.deleteMany({}); 
+            return await Design.deleteMany({});
         } catch (error) {
             throw new Error("Failed to delete all Designs");
         }
@@ -36,3 +48,4 @@ class DesignManager {
 }
 
 export default DesignManager;
+

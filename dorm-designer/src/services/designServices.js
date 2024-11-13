@@ -1,25 +1,71 @@
 import axios from 'axios';
 
-// const API_URL = 'http://localhost:5000/api'; // For now this is for when running backend on local machine (route setup on index.js), will need to change this when actually hosting server
 const API_URL = process.env.API_URL + '/design' || 'http://localhost:5000/api/design';
 
+// NOTE: When retrieving designs, to update indivdually after pulling by userId, use the available id property (not userId) in the other functions as the parameter to update design 
 
-export const getDesignByUserId = async (id) => {
-    const response = await axios.get(`${API_URL}/${id}`);
-    return response.data;
+// Get all designs by UserId
+export const getDesignsByUserId = async (userId) => {
+    try {
+        const response = await axios.get(`${API_URL}/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching designs:', error);
+        throw error;
+    }
 };
 
+// Create a new design
 export const createDesign = async (designData) => {
-    const response = await axios.post(API_URL, designData);
-    return response.data;
+    try {
+        const response = await axios.post(API_URL, designData);
+        return response.data;
+    } catch (error) {
+        console.error('Error creating design:', error);
+        throw error;
+    }
 };
 
-export const deleteDesignByUserId = async (id) => {
-    const response = await axios.delete(`${API_URL}/${id}`);
-    return response.data;
+// Delete a design by _id
+export const deleteDesignById = async (id) => {
+    try {
+        const response = await axios.delete(`${API_URL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting design:', error);
+        throw error;
+    }
 };
 
-export const updateDesignByUserId = async (id, designData) => {
-    const response = await axios.put(`${API_URL}/${id}`, designData);
-    return response.data;
+// Update a design by _id
+export const updateDesignById = async (id, designData) => {
+    try {
+        const response = await axios.put(`${API_URL}/${id}`, designData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating design:', error);
+        throw error;
+    }
+};
+
+// Delete all designs by UserId
+export const deleteDesignsByUserId = async (userId) => {
+    try {
+        const response = await axios.delete(`${API_URL}/user/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting all designs for UserId:', error);
+        throw error;
+    }
+};
+
+// Delete all designs (for all users)
+export const deleteAllDesigns = async () => {
+    try {
+        const response = await axios.delete(API_URL);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting all designs:', error);
+        throw error;
+    }
 };
