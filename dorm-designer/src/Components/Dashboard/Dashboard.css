@@ -1,0 +1,39 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    border-bottom: 1px solid #000;
+}
+
+.navbar h1 {
+    margin: 0.5rem;
+}
+
+.navbar .buttons {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    align-items: center;
+    
+}
+
+.button {
+    display: flex;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #fff;
+    background-color: #6C0002;
+    margin: 0.5rem;
+}
+
+.button a {
+    text-decoration: none;
+    color: #fff;
+}
