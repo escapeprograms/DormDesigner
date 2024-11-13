@@ -35,8 +35,4 @@ async function startServer() {
   }
 }
 
-<<<<<<< HEAD
-run().catch(console.dir);
-=======
 startServer();
->>>>>>> main

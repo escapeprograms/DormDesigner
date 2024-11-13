@@ -1,0 +1,34 @@
+/* BuildingSelection.css */
+
+.container {
+    text-align: center;
+    padding: 20px;
+}
+
+.building-card {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #f8f8f8;
+    transition: background-color 0.3s;
+}
+
+.building-card:hover {
+    background-color: #e0e0e0;
+}
+
+.back-button {
+    margin-top: 20px;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
