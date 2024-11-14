@@ -4,20 +4,6 @@ import LayoutManager from '../managers/layoutManager.js';
 const router = express.Router();
 const layoutManager = new LayoutManager();
 
-// GET ALL Layouts
-router.get('/layouts', async (req, res) => {
-    try {
-        const layouts = await layoutManager.getAllLayouts();
-        if (!layouts || layouts.length === 0) {
-            return res.status(404).json({ message: "Layouts not found" });
-        }
-        res.json(layouts);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
-// GET layout by ID
 router.get('/:id', async (req, res) => {
     try {
         const layout = await layoutManager.getLayoutById(req.params.id);
@@ -28,7 +14,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// POST new layout
 router.post('/', async (req, res) => {
     try {
         const newLayout = await layoutManager.createLayout(req.body);
@@ -38,7 +23,16 @@ router.post('/', async (req, res) => {
     }
 });
 
-// DELETE layout by ID
+router.put('/:id', async (req, res) => {
+    try {
+        const updatedLayout = await layoutManager.updateLayoutById(req.params.id, req.body);
+        if (!updatedLayout) return res.status(404).json({ message: "Layout not found" });
+        res.json(updatedLayout);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 router.delete('/:id', async (req, res) => {
     try {
         const deletedLayout = await layoutManager.deleteLayoutById(req.params.id);
