@@ -9,6 +9,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import testDesign from './three-objects/testDesign.js';
 import print from './printJSON.js';
 
+import { useParams } from 'react-router-dom';
+import {saveDesign, loadDesign} from './saveDesign.js';
+ 
+
 const handleSave = () => {
     console.log("save button clicked");
 };
@@ -41,6 +45,7 @@ const ControlsPopup = ({ onClose }) => {
 
 
 const Editor = () => {
+    const { userId, designId } = useParams();
     const mountRef = useRef(null);
     const [showPopup, setShowPopup] = useState(true);
 
@@ -72,21 +77,24 @@ const Editor = () => {
         camera.lookAt(target);
 
         let floor;
+        let objects = [];
 
         // ----------------------------------------------------------
+
+        loadDesign(designId).then(testDesign => {
+            console.log(testDesign.currentFurniture);
+            floor = testDesign.floor;
+            group.add(floor);
+            group.add(...testDesign.walls);
+            const furniture = testDesign.currentFurniture;
+            console.log(furniture[0]);
+            for(let i=0; i<furniture.length; i++) {
+                objects.push(furniture[i]);
+                console.log("this furniture", furniture[i]);
+                scene.add(furniture[i].mesh);
+            }
+        })
         
-        let objects = [];
-        console.log(testDesign.currentFurniture);
-        floor = testDesign.layout.floor;
-        group.add(floor);
-        group.add(...testDesign.layout.walls);
-        const furniture = testDesign.currentFurniture;
-        console.log(furniture[0]);
-        for(let i=0; i<furniture.length; i++) {
-            objects.push(furniture[i]);
-            console.log("this furniture", furniture[i]);
-            scene.add(furniture[i].mesh);
-        }
         
 
 
@@ -215,7 +223,7 @@ const Editor = () => {
 
             for (let i = 0; i < objects.length; i ++) {
                 objects[i].setValid();
-                if (objects[i].checkWallCollisions(testDesign.layout.floorVertices)) {
+                if (objects[i].checkWallCollisions(testDesign.floorVertices)) {
                     objects[i].setInvalid();
                 }
                 for(let j=0; j<objects.length; j++) {
