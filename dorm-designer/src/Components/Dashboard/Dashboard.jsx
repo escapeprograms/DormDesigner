@@ -1,31 +1,23 @@
-import React, {useState} from 'react'
-import './Dashboard.css'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import './Dashboard.css';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useClerk } from '@clerk/clerk-react';
+import { getDesignsByUserId, createDesign } from '../../services/designServices.js';
 
 const Dashboard = () => {
-
-  const [designs, setDesigns] = useState([]);
-
-  const addDesign = () => {
-    setDesigns([...designs, <div key = {designs.length} className = "design">New Design{designs.length+1}</div>]);
-  };
-
   return (
     <div>
-      <nav className = "navbar">
+      <nav className="navbar">
         <h1>Your Designs</h1>
         <div className = "buttons">
-          <div className = "button" onClick ={addDesign}><Link to = "/residential-area">New Design</Link></div>
-          <div className = "button">Delete Design</div>
+          <div className = "button"><Link to = "/editor">New Design</Link></div>
           <div className = "button">Help</div>
           <div className = "button"><Link to = "/">Sign Out</Link></div>
         </div>
       </nav>
-      <div className = "designContainer">
-        {designs}
-      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+
+export default Dashboard;

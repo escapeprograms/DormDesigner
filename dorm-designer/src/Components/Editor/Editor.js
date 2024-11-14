@@ -1,11 +1,43 @@
-import React, { useRef, useEffect } from 'react';
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import axios from 'axios'; 
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
-import {getFloorMesh, getWallMeshes} from './three-objects/floor';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { getFloorMesh, getWallMeshes } from './three-objects/floor';
+
+const handleSave = () => {
+    console.log("save button clicked");
+};
+const ControlsPopup = ({ onClose }) => {
+    return (
+        <div style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: 'white',
+            color: 'black',
+            padding: '20px',
+            borderRadius: '8px',
+            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
+            zIndex: 1000
+        }}>
+            <h2 style={{color: 'black'}}>Editor Controls</h2>
+            <ul>
+                <li>Left Click Drag - rotate camera</li>
+                <li>Right Click Drag - pan camera</li>
+                <li>Click Dorm Item - select</li>
+                <li>Click + Drag Dorm Item - move item</li>
+                <li>Select Item, then left/right arrow keys - rotate item</li>
+            </ul>
+            <button onClick={onClose}>Close</button>
+        </div>
+    );
+};
+
 
 const Editor = () => {
     const mountRef = useRef(null);
+    const [showPopup, setShowPopup] = useState(true);
 
     useEffect(() => {
         const scene = new THREE.Scene();
@@ -145,7 +177,49 @@ const Editor = () => {
         };
     }, []);
 
-    return <div ref={mountRef} />;
+    return (
+        <div ref={mountRef}>
+            {showPopup && <ControlsPopup onClose={() => setShowPopup(false)} />}
+            
+            <button 
+                onClick={handleSave} 
+                style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '80px', // Positioned to the left of the help button
+                    backgroundColor: '#800000',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '10px 20px',
+                    cursor: 'pointer',
+                    zIndex: 1000,
+                }}
+            >
+                Save
+            </button>
+            
+            <button 
+                onClick={() => setShowPopup(true)} 
+                style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '20px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '40px',
+                    height: '40px',
+                    fontSize: '20px',
+                    cursor: 'pointer',
+                    zIndex: 1000,
+                }}
+            >
+                ?
+            </button>
+        </div>
+    );
 };
 
 export default Editor;
