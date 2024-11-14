@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import _ from 'lodash';
+import { getWallMeshes, getFloorMesh } from './three-objects/floor';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 //cursed legacy code sent by the devil himself :)
 //NOTE: if collisions seem bugged, try refreshing the page and see if the issue is resolved.
@@ -44,6 +46,23 @@ class Footprint {
         //rendering footprint
         this.updateMesh();
     }
+
+    toJSON() {
+        //return an array of anchor vertices
+        let anchors = []; //[[x,y], ...]
+        for (let j = 0; j < v.length; j ++) {
+            //find anchor information
+            let dist = this.dists[j];
+            let angle2 = this.angleOffsets[j];
+            
+            anchors.push([Math.cos(angle2) * dist, Math.sin(angle2) * dist])
+        }
+        return anchors;
+    }
+    fromJSON(vertices) { //[[x,y], ...]
+        return new Footprint(vertices.map(v => new THREE.Vector2(v[0], v[1])));
+    }
+
     checkCollision(footprint) { //collision detection with another footprint
         for (let i = 0; i < footprint.vertices.length; i++){
             for (let j = 0; j < this.vertices.length; j++){
@@ -81,9 +100,12 @@ class Footprint {
 
 
 class DormObject {
-    constructor (id, mesh) {
+    constructor (id, meshPath) {
         this.id = id;
-        this.mesh = mesh;
+        this.isNew = true;
+        this.meshPath = meshPath;
+        this.mesh = new THREE.Mesh();
+        this.loadMesh(); //TODO: ADD ACTUAL MESH FROM PATH
 
         //selection outline
         this.isSelected = false;
@@ -105,6 +127,13 @@ class DormObject {
         this.mesh.traverse((node) => {
             node.item = this;
         });
+    }
+
+    loadMesh() {
+        const modelLoader = new GLTFLoader();
+        modelLoader.load(`${process.env.PUBLIC_URL}/${this.meshPath}`, (gltf) => {
+            this.mesh = gltf.scene;
+        })
     }
 
     select() {
@@ -135,14 +164,29 @@ class DormObject {
 
 
 class FloorItem extends DormObject {
-    constructor (id, mesh, footprints, height) {
-        super(id, mesh);
+    constructor (id, meshPath, footprints, height) {
+        super(id, meshPath);
         this.position = new THREE.Vector3();
         this.rotation = 0; //y axis rotation
         this.footprints = footprints; //an array of Footprint that could collide with other footprints
         this.height = height; //max height of the object
     }
-
+    toJSON() {
+        return {
+            //id: this.id,
+            meshPath: this.meshPath,
+            position: [this.position.x, this.position.y, this.position.z],
+            rotation: this.rotation,
+            height: this.height,
+            footprints: this.footprints.map(f => f.toJSON())
+        }
+    }
+    fromJSON(json) {
+        let floorItem = new FloorItem(json._id, json.meshPath, json.footprints.map(f => Footprint.fromJSON(f)), json.height);
+        floorItem.updateFootprints();
+        floorItem.isNew = false;
+        return floorItem;
+    }
 
     translate(position) { //set the absolute position
         this.position = position;
@@ -171,7 +215,6 @@ class FloorItem extends DormObject {
     updateFootprints() {
         for (let i = 0; i < this.footprints.length; i++) {
             let v = this.footprints[i].vertices;
-            let anchors = this.footprints[i].anchors;
             for (let j = 0; j < v.length; j ++) {
                 //find anchor information
                 let dist = this.footprints[i].dists[j];
@@ -227,8 +270,8 @@ class FloorItem extends DormObject {
 }
 
 class LeggedItem extends FloorItem {
-    constructor (id, mesh, footprints, elevatedFootprint, height, legHeight) {
-        super(id, mesh, footprints, height);
+    constructor (id, meshPath, footprints, elevatedFootprint, height, legHeight) {
+        super(id, meshPath, footprints, height);
         this.elevatedFootprint = elevatedFootprint; // a single elevated footprint
         this.legHeight = legHeight; //the maximum height of an object to be stored beneath here
     }
@@ -276,8 +319,11 @@ class DormLayout {
 }
 
 class DormDesign {
-    constructor (layout, currentFurniture) {
-        this.layout = layout; //DormLayout object
+    constructor (floorVertices, currentFurniture) {
+        this.floorVertices = floorVertices;
+        this.walls = getWallMeshes(floorVertices, 0xffffff, 6*12);
+        this.floor = getFloorMesh(floorVertices, 0xaaaaaa);
+        // this.layout = layout; //DormLayout object
         this.currentFurniture = currentFurniture;
     }
 }
