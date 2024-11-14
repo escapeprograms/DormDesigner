@@ -22,10 +22,13 @@ function saveDesign(designId, floorVertices, objects) {
 
 async function loadDesign(designId) {
     let design = await getDesignById(designId);
-
+    console.log(design, "design!!!!!!!!!!!!!!!!!!")
     //load objects
     let furnitureIds = design.furnitureIds;
+    console.log(furnitureIds, "furnitureIds")
+
     let furnitureJSON = await Promise.all(furnitureIds.map(id => getItemById(id)));
+    console.log(furnitureJSON, "furniture JSON")
 
     let furniture = furnitureJSON.map(json => {
         if (json.type == "floor") {

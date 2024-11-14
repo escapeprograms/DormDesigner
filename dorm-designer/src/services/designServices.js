@@ -29,6 +29,7 @@ export const getDesignById = async (id) => {
 // Create a new design
 export const createDesign = async (designData) => {
     try {
+        console.log(designData, "post data")
         const response = await axios.post(API_URL, designData);
         return response.data;
     } catch (error) {

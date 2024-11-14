@@ -81,6 +81,7 @@ const Editor = () => {
         let objects = [];
 
         // ----------------------------------------------------------
+        const modelLoader = new GLTFLoader();
 
         loadDesign(designId).then(design => {
             console.log(design.currentFurniture);
@@ -89,12 +90,26 @@ const Editor = () => {
             group.add(floor);
             group.add(...design.walls);
             const furniture = design.currentFurniture;
-            console.log(furniture[0]);
+
             for(let i=0; i<furniture.length; i++) {
                 objects.push(furniture[i]);
-                console.log("this furniture", furniture[i]);
-                scene.add(furniture[i].mesh);
+                console.log("added furniture", furniture[i]);
+                //TODO: move this back into DormObject
+                modelLoader.load(`${process.env.PUBLIC_URL}/${furniture[i].meshPath}`, (gltf) => {
+                    console.log("furniture", furniture[i])
+                    furniture[i].mesh = gltf.scene;
+                    //link meshes back to the DormObject
+                    furniture[i].mesh.traverse((node) => {
+                        node.item = this;
+                        console.log("node",node)
+                    });
+                    scene.add(furniture[i].mesh)
+
+                    console.log(scene)
+                });
+                
             }
+            // console.log(scene);
         })
         
         

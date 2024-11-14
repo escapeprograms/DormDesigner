@@ -16,12 +16,12 @@ const itemSchema = new mongoose.Schema({
     }
   },
   rotation: Number,
-  footprints: [{ vertices: [{ x: Number, y: Number }] }],
+  footprints: [[Number, Number]],
   height: Number,
 
   // Optional fields specific to legged items
   elevatedFootprint: {
-    type: [{ x: Number, y: Number }],
+    type: [Number, Number],
     required: function () { return this.type === 'legged'; } 
   },
   legHeight: {

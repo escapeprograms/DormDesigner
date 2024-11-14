@@ -59,7 +59,7 @@ class Footprint {
         }
         return anchors;
     }
-    fromJSON(vertices) { //[[x,y], ...]
+    static fromJSON(vertices) { //[[x,y], ...]
         return new Footprint(vertices.map(v => new THREE.Vector2(v[0], v[1])));
     }
 
@@ -104,8 +104,8 @@ class DormObject {
         this.id = id;
         this.isNew = true;
         this.meshPath = meshPath;
-        this.mesh = new THREE.Mesh();
-        this.loadMesh(); //TODO: ADD ACTUAL MESH FROM PATH
+        this.mesh = new THREE.Mesh(new THREE.BoxGeometry(10,10,10), new THREE.MeshBasicMaterial('yellow'));
+        this.loadMesh();
 
         //selection outline
         this.isSelected = false;
@@ -123,17 +123,24 @@ class DormObject {
         });
         this.invalidMaterial = new THREE.MeshBasicMaterial({color:"red", transparent:true, opacity:0.5})
 
-        //link meshes back to the DormObject
-        this.mesh.traverse((node) => {
-            node.item = this;
-        });
     }
 
-    loadMesh() {
-        const modelLoader = new GLTFLoader();
-        modelLoader.load(`${process.env.PUBLIC_URL}/${this.meshPath}`, (gltf) => {
-            this.mesh = gltf.scene;
-        })
+    loadMesh(scene) { //TODO
+        // this.temp = scene;
+        // const modelLoader = new GLTFLoader();
+        // modelLoader.load(`${process.env.PUBLIC_URL}/${this.meshPath}`, (gltf) => {
+            
+        //     console.log(this.temp)
+        //     this.mesh = gltf.scene;
+        //     this.temp.add(this.mesh);
+        //     this.temp = undefined;
+
+        //     //link meshes back to the DormObject
+        //     this.mesh.traverse((node) => {
+        //         node.item = this;
+        //     });
+        // });
+        
     }
 
     select() {
@@ -181,9 +188,12 @@ class FloorItem extends DormObject {
             footprints: this.footprints.map(f => f.toJSON())
         }
     }
-    fromJSON(json) {
+    static fromJSON(json) {
+        console.log(json)
+        console.log(json.footprints, "footprint vertices :)")
         let floorItem = new FloorItem(json._id, json.meshPath, json.footprints.map(f => Footprint.fromJSON(f)), json.height);
-        floorItem.updateFootprints();
+        floorItem.translate(new THREE.Vector3(json.position[0], json.position[1], json.position[2]));
+        floorItem.rotate(json.rotation);
         floorItem.isNew = false;
         return floorItem;
     }
