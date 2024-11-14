@@ -3,7 +3,7 @@ import Design from '../models/designModel.js';
 class DesignManager {
     async getDesignsByUserId(userId) {
         try {
-            return await Design.find({ userId: userId });
+            return await Design.find({ userId: { $eq: userId } });
         } catch (error) {
             throw new Error("Designs not found for the given UserId");
         }
@@ -16,15 +16,24 @@ class DesignManager {
 
     async updateDesignById(id, data) {
         try {
-            return await Design.findByIdAndUpdate(id, data, { new: true });
+            const updatedDesign = await Design.findByIdAndUpdate(id, data, { new: true }); 
+            if (!updatedDesign) {
+                throw new Error("Failed to update Design with the given _id");
+            }
+            return updatedDesign;
         } catch (error) {
             throw new Error("Failed to update Design with the given _id");
         }
     }
 
+
     async deleteDesignById(id) {
         try {
-            return await Design.findByIdAndDelete(id);
+            const deletedDesign = await Design.findByIdAndDelete(id); 
+            if (!deletedDesign) {
+                throw new Error("Failed to delete Design with the given _id");
+            }
+            return deletedDesign;
         } catch (error) {
             throw new Error("Failed to delete Design with the given _id");
         }
@@ -32,7 +41,7 @@ class DesignManager {
 
     async deleteDesignsByUserId(userId) {
         try {
-            return await Design.deleteMany({ userId: userId });
+            return await Design.deleteMany({ userId: { $eq: userId } }); 
         } catch (error) {
             throw new Error("Failed to delete designs for the given UserId");
         }
@@ -40,7 +49,7 @@ class DesignManager {
 
     async deleteAllDesigns() {
         try {
-            return await Design.deleteMany({});
+            return await Design.deleteMany({}); 
         } catch (error) {
             throw new Error("Failed to delete all Designs");
         }
@@ -48,4 +57,3 @@ class DesignManager {
 }
 
 export default DesignManager;
-

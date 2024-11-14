@@ -14,7 +14,6 @@ router.get('/:userId', async (req, res) => {
     }
 });
 
-// Create a new design
 router.post('/', async (req, res) => {
     try {
         const newDesign = await designManager.createDesign(req.body);
@@ -24,7 +23,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Update a design by _id
 router.put('/:id', async (req, res) => {
     try {
         const updatedDesign = await designManager.updateDesignById(req.params.id, req.body);
@@ -35,7 +33,6 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Delete a design by _id
 router.delete('/:id', async (req, res) => {
     try {
         const deletedDesign = await designManager.deleteDesignById(req.params.id);
@@ -46,7 +43,6 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// Delete all designs by UserId
 router.delete('/user/:userId', async (req, res) => {
     try {
         const result = await designManager.deleteDesignsByUserId(req.params.userId);
