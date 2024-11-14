@@ -4,6 +4,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { getFloorMesh, getWallMeshes } from './three-objects/floor';
 
+const handleSave = () => {
+    console.log("save button clicked");
+};
 const ControlsPopup = ({ onClose }) => {
     return (
         <div style={{
@@ -177,6 +180,25 @@ const Editor = () => {
     return (
         <div ref={mountRef}>
             {showPopup && <ControlsPopup onClose={() => setShowPopup(false)} />}
+            
+            <button 
+                onClick={handleSave} 
+                style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    right: '80px', // Positioned to the left of the help button
+                    backgroundColor: '#800000',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '10px 20px',
+                    cursor: 'pointer',
+                    zIndex: 1000,
+                }}
+            >
+                Save
+            </button>
+            
             <button 
                 onClick={() => setShowPopup(true)} 
                 style={{
