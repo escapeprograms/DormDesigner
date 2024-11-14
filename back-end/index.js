@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config()
 // const uri = process.env.MONGO_URL; 
@@ -23,6 +24,7 @@ async function startServer() {
 
     
     const app = express();
+    app.use(cors()); 
     app.use(express.json()); 
     const PORT = process.env.PORT || 3000;
 
