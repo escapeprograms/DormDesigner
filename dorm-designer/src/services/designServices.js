@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://dormdesignerws.onrender.com/';
+const API_URL = 'https://dormdesignerws.onrender.com/api/design';
 
 // NOTE: When retrieving designs, to update indivdually after pulling by userId, use the available id property (not userId) in the other functions as the parameter to update design 
 
