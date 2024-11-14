@@ -6,7 +6,7 @@ import './BakerFloorPlan.css';
 const BakerFloorPlan = () => {
   const canvasRef = useRef(null);
   const {userId} = useParams();
-  const {navigate} = useNavigate();
+  const navigate = useNavigate();
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [showButton, setShowButton] = useState(false);
   
@@ -75,6 +75,7 @@ const BakerFloorPlan = () => {
       const vertices = await getLayoutById("6735729ec81258da256cb3e0").vertices;
       const newDesign = await createDesign({ userId: userId, vertices: vertices, furnitureIds:["bed", "desk"]});
       navigate(`/editor/${userId}/${newDesign._id}`);
+    
     } catch (error) {
 
     }
