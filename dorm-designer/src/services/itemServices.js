@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.API_URL + '/items' || 'http://localhost:5000/api/items';
+const API_URL = 'http://localhost:3000/api/items';
 
 // Create a new item, make sure type field is filled out, i.e there is a property(enum of legged, floor, wall) called type and it needs to be set, check itemModel in backend
 export const createItem = async (itemData) => {

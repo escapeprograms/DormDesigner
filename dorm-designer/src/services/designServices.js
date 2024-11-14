@@ -1,12 +1,13 @@
 import axios from 'axios';
 
-const API_URL = process.env.API_URL + '/design' || 'http://localhost:5000/api/design';
+const API_URL = 'http://localhost:3000/api/design';
 
 // NOTE: When retrieving designs, to update indivdually after pulling by userId, use the available id property (not userId) in the other functions as the parameter to update design 
 
 // Get all designs by UserId
 export const getDesignsByUserId = async (userId) => {
     try {
+        console.log(API_URL);
         const response = await axios.get(`${API_URL}/${userId}`);
         return response.data;
     } catch (error) {
