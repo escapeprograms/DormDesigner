@@ -1,10 +1,11 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './BuildingSelection.css';
 
     const BuildingSelection = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const {userId} = useParams();
 
     // Retrieve the selected area name from the state
     const selectedArea = location.state?.area || 'Unknown Area';
@@ -23,7 +24,7 @@ import './BuildingSelection.css';
     const handleBuildingSelect = (building) => {
         console.log(`Selected building: ${building}`);
         // Additional navigation or actions can be added here
-        navigate(`/${building+"FloorPlan"}`)
+        navigate(`/${building+"FloorPlan"}/${userId}`)
         
     };
 
@@ -47,7 +48,7 @@ import './BuildingSelection.css';
         </div>
 
         {/* Back button */}
-        <button onClick={() => navigate('/residential-area')} className="back-button">
+        <button onClick={() => navigate(`/residential-area/${userId}`)} className="back-button">
             Back to Residential Area Selection
         </button>
         </div>

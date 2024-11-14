@@ -1,8 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getLayoutById } from '../../../services/layoutServices';
+import { createDesign } from '../../../services/designServices';
 import './BakerFloorPlan.css';
 const BakerFloorPlan = () => {
   const canvasRef = useRef(null);
+  const {userId} = useParams();
+  const {navigate} = useNavigate();
   const [selectedRoom, setSelectedRoom] = useState(null);
+  const [showButton, setShowButton] = useState(false);
   
   // Define grid properties
   const ROOM_SIZE = 60;
@@ -64,6 +70,18 @@ const BakerFloorPlan = () => {
     }
   }
 
+  const handleCreate = async () => {
+    try {
+      const vertices = await getLayoutById("6735729ec81258da256cb3e0").vertices;
+      console.log('a');
+      console.log(vertices);
+      const newDesign = createDesign({vertices: vertices, userId: {userId}, furnitureIds:["bed", "desk"]});
+      navigate(`/editor/${userId}/${newDesign._id}`);
+    } catch (error) {
+      
+    }
+  };
+
   const drawFloorPlan = (ctx) => {
     // Clear canvas
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -113,6 +131,7 @@ const BakerFloorPlan = () => {
     );
     
     setSelectedRoom(clickedRoom || null);
+    setShowButton(true);
   };
 
   const handleMouseMove = (event) => {
@@ -163,6 +182,7 @@ const BakerFloorPlan = () => {
           </div>
         )}
       </div>
+      {showButton && <div className = "button" onClick = {handleCreate}>Create</div>}
     </div>
   );
 };
