@@ -72,7 +72,7 @@ async function testDatabase() {
     const itemObject = {
       id: "54a5732f-1eb7-449e-89d3-40db1be2d31d", 
       type: "floor", 
-      mesh: {},
+      meshPath: "abc",
       position: [0, 0, 0], 
       rotation: 0,
       footprints: [
