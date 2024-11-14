@@ -8,7 +8,11 @@ class ItemManager {
 
     async getItemById(id) {
         try {
-            return await Item.findById(id);
+            const item = await Item.findOne({ id }); // Search by `id` field
+            if (!item) {
+                throw new Error("Item not found");
+            }
+            return item;
         } catch (error) {
             throw new Error("Item not found");
         }
@@ -16,7 +20,11 @@ class ItemManager {
 
     async updateItemById(id, data) {
         try {
-            return await Item.findByIdAndUpdate(id, data, { new: true });
+            const updatedItem = await Item.findOneAndUpdate({ id }, data, { new: true });
+            if (!updatedItem) {
+                throw new Error("Failed to update item");
+            }
+            return updatedItem;
         } catch (error) {
             throw new Error("Failed to update item");
         }
@@ -24,11 +32,16 @@ class ItemManager {
 
     async deleteItemById(id) {
         try {
-            return await Item.findByIdAndDelete(id);
+            const deletedItem = await Item.findOneAndDelete({ id });
+            if (!deletedItem) {
+                throw new Error("Failed to delete item");
+            }
+            return deletedItem;
         } catch (error) {
             throw new Error("Failed to delete item");
         }
     }
 }
+
 
 export default ItemManager;

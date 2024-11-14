@@ -1,29 +1,50 @@
 import Design from '../models/designModel.js';
 
 class DesignManager {
-    async getDesignByUserId(id) {
+    async getDesignsByUserId(userId) {
         try {
-            return await Design.findById(id);
+            return await Design.find({ userId: { $eq: userId } });
         } catch (error) {
-            throw new Error("Design not found");
+            throw new Error("Designs not found for the given UserId");
         }
     }
 
     async createDesign(data) {
         const newDesign = new Design(data);
-        return await newDesign.save(); 
+        return await newDesign.save();
     }
 
-    async updateDesignByUserId(id, data) {
+    async updateDesignById(id, data) {
         try {
-            return await Design.findByIdAndUpdate(id, data, { new: true });
+            const updatedDesign = await Design.findByIdAndUpdate(id, data, { new: true }); 
+            if (!updatedDesign) {
+                throw new Error("Failed to update Design with the given _id");
+            }
+            return updatedDesign;
         } catch (error) {
-            throw new Error("Failed to update Design");
+            throw new Error("Failed to update Design with the given _id");
         }
     }
 
-    async deleteDesignByUserId(id) {
-        return await Design.findByIdAndDelete(id);
+
+    async deleteDesignById(id) {
+        try {
+            const deletedDesign = await Design.findByIdAndDelete(id); 
+            if (!deletedDesign) {
+                throw new Error("Failed to delete Design with the given _id");
+            }
+            return deletedDesign;
+        } catch (error) {
+            throw new Error("Failed to delete Design with the given _id");
+        }
+    }
+
+    async deleteDesignsByUserId(userId) {
+        try {
+            return await Design.deleteMany({ userId: { $eq: userId } }); 
+        } catch (error) {
+            throw new Error("Failed to delete designs for the given UserId");
+        }
     }
 
     async deleteAllDesigns() {
