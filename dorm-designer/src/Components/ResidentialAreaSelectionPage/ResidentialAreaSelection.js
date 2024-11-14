@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import central from '../Assets/central.jpg';
 import northeast from '../Assets/northeast.jpg';
 import ohill from '../Assets/ohill.jpg';
@@ -17,9 +17,10 @@ const areas = [
 
 const ResidentialAreaSelection = () => {
     const navigate = useNavigate();
+    const {userId} = useParams();
 
     const handleAreaSelect = (areaName) => {
-        navigate('/building-selection', { state: { area: areaName } });
+        navigate(`/building-selection/${userId}`, { state: { area: areaName } });
     };
 
     return (
