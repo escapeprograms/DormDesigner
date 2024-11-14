@@ -9,7 +9,6 @@ const WelcomeBox = () => {
 
   useEffect(() => {
     if (isSignedIn && user) {
-      // Redirect to personalized dashboard using user ID
       navigate(`/dashboard/${user.id}`);
     }
   }, [isSignedIn, user, navigate]);
