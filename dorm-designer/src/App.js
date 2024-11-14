@@ -28,7 +28,7 @@ function App() {
         <Route path="/BakerFloorPlan/:userId" element={<BakerFloorPlan />} />
         <Route exact path ="/" element = {<LoginPage/>}></Route>
         <Route exact path = "/dashboard/:userId" element = {<Dashboard/>}></Route>
-        <Route exact path = "/editor/:userId" element = {<Editor/>}></Route>
+        <Route exact path = "/editor/:userId/:designId" element = {<Editor/>}></Route>
       </Routes>
     </Router>
   );

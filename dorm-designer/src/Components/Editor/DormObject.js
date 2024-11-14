@@ -38,6 +38,7 @@ function lineLineCross(a,b,c,d){
 class Footprint {
     constructor(vertices) {
         this.vertices = vertices; //array of Vector2
+        this.anchors = this.vertices.map(v => v.clone()); //save anchors for toJSON()
         this.dists = this.vertices.map(v => Math.sqrt((v.x * v.x) + (v.y * v.y)))
         this.angleOffsets = this.vertices.map(v => Math.atan2(v.y, v.x))
 
@@ -59,7 +60,7 @@ class Footprint {
         }
         return anchors;
     }
-    fromJSON(vertices) { //[[x,y], ...]
+    static fromJSON(vertices) { //[[x,y], ...]
         return new Footprint(vertices.map(v => new THREE.Vector2(v[0], v[1])));
     }
 
@@ -104,8 +105,31 @@ class DormObject {
         this.id = id;
         this.isNew = true;
         this.meshPath = meshPath;
-        this.mesh = new THREE.Mesh();
-        this.loadMesh(); //TODO: ADD ACTUAL MESH FROM PATH
+        this.mesh = new THREE.Mesh(new THREE.BoxGeometry(10,10,10), new THREE.MeshBasicMaterial({color:'yellow'})); //default mesh
+        this.selectionMesh = this.mesh.clone(); //default selection mesh
+        // this.loadMesh();
+
+        this.valid = true;
+        this.regularMaterials = []; //save each geometry's original material
+        this.invalidMaterial = new THREE.MeshBasicMaterial({color:"red", transparent:true, opacity:0.5})
+
+    }
+
+    async loadMesh() {
+        const modelLoader = new GLTFLoader();
+        let gltf = await new Promise((resolve, reject) => {
+            modelLoader.load(`${process.env.PUBLIC_URL}/${this.meshPath}`,
+                (gltf) => {
+                    resolve(gltf);
+                }
+            );
+        });
+
+        this.mesh = gltf.scene;
+        //link meshes back to the DormObject
+        this.mesh.traverse((node) => {
+            node.item = this;
+        });
 
         //selection outline
         this.isSelected = false;
@@ -115,25 +139,13 @@ class DormObject {
         });
         this.selectionMesh.visible = false;
 
-        //save each geometry's original material
-        this.valid = true;
+        //load all the regular materials
         this.regularMaterials = [];
         this.mesh.traverse((node) => {
             this.regularMaterials.push(node.material);
         });
-        this.invalidMaterial = new THREE.MeshBasicMaterial({color:"red", transparent:true, opacity:0.5})
-
-        //link meshes back to the DormObject
-        this.mesh.traverse((node) => {
-            node.item = this;
-        });
-    }
-
-    loadMesh() {
-        const modelLoader = new GLTFLoader();
-        modelLoader.load(`${process.env.PUBLIC_URL}/${this.meshPath}`, (gltf) => {
-            this.mesh = gltf.scene;
-        })
+        return this.mesh;
+        
     }
 
     select() {
@@ -181,10 +193,18 @@ class FloorItem extends DormObject {
             footprints: this.footprints.map(f => f.toJSON())
         }
     }
-    fromJSON(json) {
+    static fromJSON(json, scene) {
+        // console.log("FOOTPRINTS", json.footprints)
         let floorItem = new FloorItem(json._id, json.meshPath, json.footprints.map(f => Footprint.fromJSON(f)), json.height);
-        floorItem.updateFootprints();
-        floorItem.isNew = false;
+
+        floorItem.loadMesh().then(mesh => {
+            floorItem.translate(new THREE.Vector3(json.position[0], json.position[1], json.position[2]));
+            floorItem.rotate(json.rotation);
+            floorItem.isNew = false;
+            scene.add(mesh);
+            scene.add(floorItem.selectionMesh);
+        });
+        
         return floorItem;
     }
 

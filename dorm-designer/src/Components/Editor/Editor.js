@@ -81,20 +81,23 @@ const Editor = () => {
         let objects = [];
 
         // ----------------------------------------------------------
+        const modelLoader = new GLTFLoader();
 
-        loadDesign(designId).then(design => {
+        loadDesign(designId, scene).then(design => {
             console.log(design.currentFurniture);
             floor = design.floor;
             floorVertices = design.floorVertices
             group.add(floor);
             group.add(...design.walls);
             const furniture = design.currentFurniture;
-            console.log(furniture[0]);
+
             for(let i=0; i<furniture.length; i++) {
                 objects.push(furniture[i]);
-                console.log("this furniture", furniture[i]);
-                scene.add(furniture[i].mesh);
+                console.log("added furniture", furniture[i]);
+                
+                
             }
+            // console.log(scene);
         })
         
         
@@ -188,13 +191,16 @@ const Editor = () => {
 
         window.addEventListener('keydown', rotateSelection);
 
-        /////////
-
-        for (let i = 0; i < objects.length; i++) {
-            // group.add(objects[i].footprints[0].mesh) // draw the red footprint, comment this out once testing is done
-            scene.add(objects[i].selectionMesh)
-            scene.add(objects[i].mesh); 
-        }
+        /////////FOOTPRINT
+        // setTimeout(() => {
+        //     for (let i = 0; i < objects.length; i++) {
+        //         console.log(objects[i].footprints[0].mesh)
+        //         objects[i].footprints[0].mesh.position.z = 50;
+        //         group.add(objects[i].footprints[0].mesh) // draw the red footprint, comment this out once testing is done
+        //     }
+        //     console.log("group", group)
+        // }, 3000)
+        
         
         //rotate everything by 90 deg
         scene.add(group);
@@ -221,15 +227,16 @@ const Editor = () => {
 
 
         const animate = () => {
-            requestAnimationFrame(animate);
-
+            requestAnimationFrame(animate); 
             for (let i = 0; i < objects.length; i ++) {
                 objects[i].setValid();
                 if (objects[i].checkWallCollisions(floor)) {
+                    console.log("WALL")
                     objects[i].setInvalid();
                 }
                 for(let j=0; j<objects.length; j++) {
                     if(j !== i && objects[i].checkCollision(objects[j])) {
+                        console.log("OBJ")
                         objects[i].setInvalid();
                     }
                 }

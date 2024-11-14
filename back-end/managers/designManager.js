@@ -1,6 +1,14 @@
 import Design from '../models/designModel.js';
 
 class DesignManager {
+    async getDesignById(id) {
+        try {
+            return await Design.findById(id);
+        } catch (error) {
+            throw new Error("Layout not found");
+        }
+    }
+    
     async getDesignsByUserId(userId) {
         try {
             return await Design.find({ userId: { $eq: userId } });

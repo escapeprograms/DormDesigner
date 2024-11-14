@@ -14,6 +14,16 @@ router.get('/:userId', async (req, res) => {
     }
 });
 
+router.get('/user/:id', async (req, res) => {
+    try {
+        const design = await designManager.getDesignById(req.params.id);
+        if (!design) return res.status(404).json({ message: "Design not found with the given ID" });
+        res.json(design);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 router.post('/', async (req, res) => {
     try {
         const newDesign = await designManager.createDesign(req.body);
