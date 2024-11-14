@@ -74,6 +74,7 @@ const BakerFloorPlan = () => {
     try {
       const vertices = await getLayoutById("6735729ec81258da256cb3e0").vertices;
       const newDesign = await createDesign({ userId: userId, vertices: vertices, furnitureIds:["bed", "desk"]});
+      console.log("NEW LINK", `/editor/${userId}/${newDesign._id}`)
       navigate(`/editor/${userId}/${newDesign._id}`);
     } catch (error) {
 
