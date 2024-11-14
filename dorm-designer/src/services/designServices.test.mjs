@@ -12,7 +12,9 @@ import {
 } from './designServices.js'; 
 
 const mock = new MockAdapter(axios);
-const API_URL = 'https://dormdesignerws.onrender.com/';
+// const API_URL = 'https://dormdesignerws.onrender.com/';
+const API_URL_base = process.env.API_URL || 'http://localhost:5000/api';
+const API_URL = API_URL_base + "/design";
 
 describe('Design Services API Functions', function() {
     afterEach(() => {
