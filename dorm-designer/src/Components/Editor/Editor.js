@@ -6,7 +6,7 @@ import {getFloorMesh, getWallMeshes} from './three-objects/floor';
 import { Footprint, DormObject, FloorItem } from './DormObject';
 import _ from 'lodash'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import testDesign from './three-objects/testDesign.js';
+// import testDesign from './three-objects/testDesign.js';
 import print from './printJSON.js';
 
 import { useParams } from 'react-router-dom';
@@ -76,17 +76,19 @@ const Editor = () => {
         const target = new THREE.Vector3(40, 0, -40);
         camera.lookAt(target);
 
+        let floorVertices;
         let floor;
         let objects = [];
 
         // ----------------------------------------------------------
 
-        loadDesign(designId).then(testDesign => {
-            console.log(testDesign.currentFurniture);
-            floor = testDesign.floor;
+        loadDesign(designId).then(design => {
+            console.log(design.currentFurniture);
+            floor = design.floor;
+            floorVertices = design.floorVertices
             group.add(floor);
-            group.add(...testDesign.walls);
-            const furniture = testDesign.currentFurniture;
+            group.add(...design.walls);
+            const furniture = design.currentFurniture;
             console.log(furniture[0]);
             for(let i=0; i<furniture.length; i++) {
                 objects.push(furniture[i]);
@@ -223,7 +225,7 @@ const Editor = () => {
 
             for (let i = 0; i < objects.length; i ++) {
                 objects[i].setValid();
-                if (objects[i].checkWallCollisions(testDesign.floorVertices)) {
+                if (objects[i].checkWallCollisions(floor)) {
                     objects[i].setInvalid();
                 }
                 for(let j=0; j<objects.length; j++) {
