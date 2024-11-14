@@ -182,7 +182,7 @@ const BakerFloorPlan = () => {
           </div>
         )}
       </div>
-      {showButton && <div className = "button" onClick = {handleCreate}>Create</div>}
+      {showButton && <div className = "createButton" onClick = {handleCreate}>Create</div>}
     </div>
   );
 };
