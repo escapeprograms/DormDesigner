@@ -50,7 +50,7 @@ class Footprint {
     toJSON() {
         //return an array of anchor vertices
         let anchors = []; //[[x,y], ...]
-        for (let j = 0; j < v.length; j ++) {
+        for (let j = 0; j < this.vertices.length; j ++) {
             //find anchor information
             let dist = this.dists[j];
             let angle2 = this.angleOffsets[j];

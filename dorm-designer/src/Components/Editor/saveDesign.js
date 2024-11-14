@@ -1,6 +1,7 @@
 import { updateDesignById, getDesignsByUserId } from '../../services/designServices';
 import { updateItemById, createItem, getItemById } from '../../services/itemServices';
-import { DormDesign } from './DormObject.js';
+import { DormDesign, FloorItem } from './DormObject.js';
+import * as THREE from 'three';
 
 function saveDesign(designId, floorVertices, objects) {
     //update existing items
@@ -44,4 +45,4 @@ async function loadDesign(designId) {
 
 
 
-export default {saveDesign, loadDesign};
+export {saveDesign, loadDesign};
