@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
-import BuildingSelection from './Components/BuildingSelectionPage/BuildingSelection';
-import BakerFloorPlan from './Components/FloorPlans/Baker/BakerFloorPlan';
-import ResidentialAreaSelection from './Components/ResidentialAreaSelectionPage/ResidentialAreaSelection';
+import BuildingSelection from './Components/BuildingSelectionPage/BuildingSelection.js';
+import BakerFloorPlan from './Components/FloorPlans/Baker/BakerFloorPlan.js';
+import ResidentialAreaSelection from './Components/ResidentialAreaSelectionPage/ResidentialAreaSelection.js';
 
 
-import Editor from './Components/Editor/Editor';
-import LoginPage from './Components/LoginPage/LoginPage';
-import Dashboard from './Components/Dashboard/Dashboard';
+import Editor from './Components/Editor/Editor.js';
+import LoginPage from './Components/LoginPage/LoginPage.jsx';
+import Dashboard from './Components/Dashboard/Dashboard.jsx';
 
 
 function App() {

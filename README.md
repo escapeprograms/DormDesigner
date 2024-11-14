@@ -10,17 +10,14 @@ To merge a subteam's branch into main, it requires approval from at least 1 repr
 
 Clone the project with `git clone https://github.com/escapeprograms/DormDesigner.git`
 
-For everyone, inside the `DormDesigner` folder, run `npm i`.
-
-For working on frontend, go into the 'dorm-designer' folder and run `npm i`.
-
-Run `npm i react-scripts` and`npm i react-router-dom` as well.
+Inside the `DormDesigner` folder, run `npm run dev set up`.
 
 # Running
 
 Run backend: `node .` in `DormDesigner`
 Run frontend: `npm start` in `dorm-designer`
 Build frontend: `npm run build` in `dorm-designer`
+One-step build and run: `npm run .` in `DormDesigner`
 
 Build the frontend first, then run backend. Running frontend is for development only.
 

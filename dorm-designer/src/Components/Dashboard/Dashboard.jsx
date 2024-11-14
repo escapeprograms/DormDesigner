@@ -66,9 +66,9 @@ const Dashboard = () => {
         ) : designs.length > 0 ? (
           <ul className="design-list">
             {designs.map((design) => (
-              <li key={design.id} className="design-item">
-                <Link to={`/design/${design.id}`} className="design-link">
-                  {design.name || 'Unnamed Design'}
+              <li key={design._id} className="design-item">
+                <Link to={`/editor/${userId}/${design.id}`} className="design-link">
+                  {design._id}
                 </Link>
               </li>
             ))}
