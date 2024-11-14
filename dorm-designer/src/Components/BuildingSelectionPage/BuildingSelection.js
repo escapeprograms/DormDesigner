@@ -11,10 +11,10 @@ import './BuildingSelection.css';
 
     // Sample data for buildings by area
     const buildingsByArea = {
-        Northeast: ['MaryLyon', 'Johnson', 'CrabTree'],
-        Southwest: ['JQA', 'Crampton', 'PierPont'],
-        Central: ['Baker', 'Greeno', 'Van Meter'],
-        OrchardHill: ['Webster', 'Dickinson', 'Field', 'Grayson'],
+        Northeast: ['Crabtree', 'Dwight', 'Hamlin'],
+        Southwest: ['JQA', 'Crampton'],
+        Central: ['Baker', 'Greeno', 'VanMeter'],
+        OrchardHill: ['Field', 'Grayson'],
         Sylvan: ['Cashin', 'McNamara']
     };
 
@@ -29,7 +29,7 @@ import './BuildingSelection.css';
 
     return (
         <div className="container">
-        <h2>Select a Building in {selectedArea}</h2>
+        <h2 style={{color: 'black'}}>Select a Building in {selectedArea}</h2>
         <div>
             {buildings.length > 0 ? (
             buildings.map((building, index) => (
