@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // const API_URL = 'https://dormdesignerws.onrender.com/api/design';
 
-const API_URL_base = process.env.API_URL || 'http://localhost:5000/api';
+const API_URL_base = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 const API_URL = API_URL_base + "/design";
 
 

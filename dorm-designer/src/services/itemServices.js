@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // const API_URL = 'https://dormdesignerws.onrender.com/api/design';
 
-const API_URL_base = process.env.API_URL || 'http://localhost:5000/api';
+const API_URL_base = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 const API_URL = API_URL_base + "/items"
 
 // Create a new item, make sure type field is filled out, i.e there is a property(enum of legged, floor, wall) called type and it needs to be set, check itemModel in backend
