@@ -16,7 +16,7 @@ const itemSchema = new mongoose.Schema({
     }
   },
   rotation: Number,
-  footprints: [[Number, Number]],
+  footprints: [[[Number, Number]]],
   height: Number,
 
   // Optional fields specific to legged items

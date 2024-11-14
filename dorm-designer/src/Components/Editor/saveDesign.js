@@ -1,3 +1,4 @@
+import { floor } from 'lodash';
 import { updateDesignById, getDesignById } from '../../services/designServices';
 import { updateItemById, createItem, getItemById } from '../../services/itemServices';
 import { DormDesign, FloorItem } from './DormObject.js';
@@ -20,21 +21,19 @@ function saveDesign(designId, floorVertices, objects) {
     // });
 }
 
-async function loadDesign(designId) {
+async function loadDesign(designId, scene) {
     let design = await getDesignById(designId);
-    console.log(design, "design!!!!!!!!!!!!!!!!!!")
     //load objects
     let furnitureIds = design.furnitureIds;
-    console.log(furnitureIds, "furnitureIds")
 
     let furnitureJSON = await Promise.all(furnitureIds.map(id => getItemById(id)));
-    console.log(furnitureJSON, "furniture JSON")
 
     let furniture = furnitureJSON.map(json => {
         if (json.type == "floor") {
-            return FloorItem.fromJSON(json);
+            let floorItem = FloorItem.fromJSON(json, scene);
+            return floorItem;
         }
-        //TODO: generalize
+        //TODO: generalize to other item types
     });
     
     //load floor and walls

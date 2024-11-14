@@ -18,9 +18,7 @@ class DesignManager {
     }
 
     async createDesign(data) {
-        console.log(data)
         const newDesign = new Design(data);
-        console.log(newDesign)
         return await newDesign.save();
     }
 
