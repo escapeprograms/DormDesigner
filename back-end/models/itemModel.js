@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const itemSchema = new mongoose.Schema({
   id: { type: String, required: true },  // UUID
   type: { type: String, required: true, enum: ['floor', 'legged', 'wall'] }, 
-  mesh: { type: Object, required: true }, 
+  meshPath: { type: String, required: true }, 
   position: {
     type: [Number], 
     validate: {

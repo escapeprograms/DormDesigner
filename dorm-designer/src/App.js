@@ -7,7 +7,6 @@ import ResidentialAreaSelection from './Components/ResidentialAreaSelectionPage/
 
 import Editor from './Components/Editor/Editor';
 import LoginPage from './Components/LoginPage/LoginPage';
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import Dashboard from './Components/Dashboard/Dashboard';
 
 function App() {
@@ -26,7 +25,7 @@ function App() {
         <Route path="/building-selection" element={<BuildingSelection />} />
         <Route path="/BakerFloorPlan" element={<BakerFloorPlan />} />
         <Route exact path ="/" element = {<LoginPage/>}></Route>
-        <Route exact path = "/dashboard" element = {<Dashboard/>}></Route>
+        <Route exact path = "/dashboard/:userId" element = {<Dashboard/>}></Route>
         <Route exact path = "/editor" element = {<Editor/>}></Route>
       </Routes>
     </Router>
