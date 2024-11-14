@@ -13,7 +13,6 @@ const Editor = () => {
     const mountRef = useRef(null);
 
     useEffect(() => {
-        // print();
         const renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.shadowMap.enabled = true;
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -41,11 +40,6 @@ const Editor = () => {
         camera.lookAt(target);
 
         let floor;
-
-        // const material3 = new THREE.MeshPhongMaterial({ color: 0xffffaa });
-        // const plane = new THREE.PlaneGeometry(100, 100);
-        // floor = new THREE.Mesh(plane, material3);
-        // group.add(floor);
 
         // ----------------------------------------------------------
         
@@ -132,9 +126,14 @@ const Editor = () => {
         function rotateSelection(event) {
             controls.enabled = true;
             console.log("rotate this object", clickSelection);
-            if(event.key === "ArrowLeft") {
-                clickSelection.rotate(clickSelection.rotation + 15*Math.PI/180);
+            if(clickSelection !== null) {
+                if(clickSelection && event.key === "ArrowLeft") {
+                    clickSelection.rotate(clickSelection.rotation + 15*Math.PI/180);
+                } else if(clickSelection && event.key === "ArrowRight") {
+                    clickSelection.rotate(clickSelection.rotation - 15*Math.PI/180);
+                }
             }
+            
         }
 
         //event listeners
@@ -150,7 +149,7 @@ const Editor = () => {
         /////////
 
         for (let i = 0; i < objects.length; i++) {
-            group.add(objects[i].footprints[0].mesh) // draw the red footprint, comment this out once testing is done
+            // group.add(objects[i].footprints[0].mesh) // draw the red footprint, comment this out once testing is done
             scene.add(objects[i].selectionMesh)
             scene.add(objects[i].mesh); 
         }
@@ -164,8 +163,8 @@ const Editor = () => {
 
         const lightD = new THREE.DirectionalLight(0xffddee, 1);
         lightD.castShadow = true;
-        const lightHelper = new THREE.DirectionalLightHelper(lightD, 10, 0xff0000);
-        scene.add(lightHelper);
+        // const lightHelper = new THREE.DirectionalLightHelper(lightD, 10, 0xff0000);
+        // scene.add(lightHelper);
 
         lightD.position.set(50, 100, -50);
         scene.add(lightD);
@@ -173,10 +172,10 @@ const Editor = () => {
         lightD.target.position.set(20, 0, -20);
         scene.add(lightD.target);
 
-        const arrowDirection = new THREE.Vector3();
-        arrowDirection.subVectors(lightD.target.position, lightD.position).normalize();
-        const arrowHelper = new THREE.ArrowHelper(arrowDirection, lightD.position, 20, 0x00ff00); // Length 20, color green
-        scene.add(arrowHelper);
+        // const arrowDirection = new THREE.Vector3();
+        // arrowDirection.subVectors(lightD.target.position, lightD.position).normalize();
+        // const arrowHelper = new THREE.ArrowHelper(arrowDirection, lightD.position, 20, 0x00ff00); // Length 20, color green
+        // scene.add(arrowHelper);
 
 
         const animate = () => {
@@ -184,7 +183,7 @@ const Editor = () => {
 
             for (let i = 0; i < objects.length; i ++) {
                 objects[i].setValid();
-                if (objects[i].checkWallCollisions(testDesign.floorVertices)) {
+                if (objects[i].checkWallCollisions(testDesign.layout.floorVertices)) {
                     objects[i].setInvalid();
                 }
                 for(let j=0; j<objects.length; j++) {

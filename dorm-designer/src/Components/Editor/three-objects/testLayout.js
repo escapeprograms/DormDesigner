@@ -17,40 +17,40 @@ const databaseLayoutObject = {
     defaultFurniture: [
         {
             id: "id1",
-            position: {x:10, y:0, z:-10},
+            position: {x:1+84.8/2, y:0, z:-1-37.8/2},
             rotation: 0,
             footprints: [
-                [0, 0],
-                [1, 0],
-                [1, 1],
-                [0, 1],
-                [0, 0]
+                [-42.4, -18.9],
+                [42.4, -18.9],
+                [42.4, 18.9],
+                [-42.4, 18.9],
+                [-42.4, -18.9],
             ],
             mesh: bedJSON
         },
         {
             id: "id2",
-            position: {x:85, y:0, z:0},
-            rotation: Math.PI,
+            position: {x:2+85+12, y:0, z:-1-24},
+            rotation: 0,
             footprints: [
-                [0, 0],
-                [1, 0],
-                [1, 1],
-                [0, 1],
-                [0, 0]
+                [-12, -24],
+                [12, -24],
+                [12, 24],
+                [-12, 24],
+                [-12, -24]
             ],
             mesh: deskJSON
         },
         {
             id: "id3",
-            position: {x:100, y:0, z:0},
-            rotation: Math.PI,
+            position: {x:150, y:0, z:-16},
+            rotation: 90*Math.PI/180,
             footprints: [
-                [0, 0],
-                [1, 0],
-                [1, 1],
-                [0, 1],
-                [0, 0]
+                [-12, -15],
+                [12, -15],
+                [12, 15],
+                [-12, 15],
+                [-12, -15],
             ],
             mesh: dresserJSON
         }
@@ -62,7 +62,7 @@ const floorVertices = databaseLayoutObject.vertices.map((v) => {
     return new THREE.Vector2(v[0], v[1]);
 });
 const walls = getWallMeshes(floorVertices, 0xffffff, 6*12);
-const floor = getFloorMesh(floorVertices, 0xffffff, 10);
+const floor = getFloorMesh(floorVertices, 0xaaaaaa, 10);
 
 //loading furniture
 const JSONLoader = new THREE.ObjectLoader();
@@ -76,6 +76,7 @@ const defaultFurniture = databaseLayoutObject.defaultFurniture.map((o) => {
     const thisItem = new FloorItem(o.id, mesh, [footprint.clone()], 15);
     const p = o.position;
     thisItem.translate(new THREE.Vector3(p.x, p.y, p.z));
+    thisItem.rotate(o.rotation);
     return thisItem;
 });
 

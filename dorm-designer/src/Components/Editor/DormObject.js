@@ -89,7 +89,7 @@ class DormObject {
         this.isSelected = false;
         this.selectionMesh = this.mesh.clone();
         this.selectionMesh.traverse((node) => {
-            node.material = new THREE.MeshBasicMaterial({color:"green", wireframe:true});
+            node.material = new THREE.MeshLambertMaterial({color:"white", wireframe:true});
         });
         this.selectionMesh.visible = false;
 
@@ -276,8 +276,7 @@ class DormLayout {
 }
 
 class DormDesign {
-    constructor (floorVertices, layout, currentFurniture) {
-        this.floorVertices = floorVertices;
+    constructor (layout, currentFurniture) {
         this.layout = layout; //DormLayout object
         this.currentFurniture = currentFurniture;
     }
