@@ -16,6 +16,16 @@ export const getDesignsByUserId = async (userId) => {
     }
 };
 
+export const getDesignById = async (id) => {
+    try {
+        const response = await axios.get(`${API_URL}/user/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching design:', error);
+        throw error;
+    }
+};
+
 // Create a new design
 export const createDesign = async (designData) => {
     try {

@@ -1,4 +1,4 @@
-import { updateDesignById, getDesignsByUserId } from '../../services/designServices';
+import { updateDesignById, getDesignById } from '../../services/designServices';
 import { updateItemById, createItem, getItemById } from '../../services/itemServices';
 import { DormDesign, FloorItem } from './DormObject.js';
 import * as THREE from 'three';
@@ -21,7 +21,7 @@ function saveDesign(designId, floorVertices, objects) {
 }
 
 async function loadDesign(designId) {
-    let design = await getDesignsByUserId(designId);
+    let design = await getDesignById(designId);
 
     //load objects
     let furnitureIds = design.furnitureIds;
