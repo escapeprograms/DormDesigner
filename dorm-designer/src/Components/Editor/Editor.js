@@ -11,6 +11,12 @@ import print from './printJSON.js';
 
 import { useParams } from 'react-router-dom';
 import {saveDesign, loadDesign} from './saveDesign.js';
+import { getDesignById } from '../../services/designServices.js';
+import { updateItemById, createItem, getItemById } from '../../services/itemServices';
+import bedJSON from './three-objects/bedModel.json';
+import deskJSON from './three-objects/deskModel.json'
+import dresserJSON from './three-objects/dresserModel.json';
+
  
 
 const handleSave = () => {
@@ -82,35 +88,75 @@ const Editor = () => {
 
         // ----------------------------------------------------------
         const modelLoader = new GLTFLoader();
+        const JSONLoader = new THREE.ObjectLoader();
+        const gettingJSONs = {
+            "bed-centered.glb": bedJSON,
+            "desk-centered.glb": deskJSON,
+            "dresser-centered2.glb": dresserJSON
+        }
 
-        loadDesign(designId).then(design => {
-            console.log(design.currentFurniture);
-            floor = design.floor;
-            floorVertices = design.floorVertices
-            group.add(floor);
-            group.add(...design.walls);
-            const furniture = design.currentFurniture;
+        async function asyncStuff() {
+            const databaseDesign = await getDesignById(designId);
+            console.log("database design", databaseDesign);
 
-            for(let i=0; i<furniture.length; i++) {
-                objects.push(furniture[i]);
-                console.log("added furniture", furniture[i]);
-                //TODO: move this back into DormObject
-                modelLoader.load(`${process.env.PUBLIC_URL}/${furniture[i].meshPath}`, (gltf) => {
-                    console.log("furniture", furniture[i])
-                    furniture[i].mesh = gltf.scene;
-                    //link meshes back to the DormObject
-                    furniture[i].mesh.traverse((node) => {
-                        node.item = this;
-                        console.log("node",node)
-                    });
-                    scene.add(furniture[i].mesh)
+            const databaseFurniture = await Promise.all(databaseDesign.furnitureIds.map(id => getItemById(id)));
+            console.log("database furniture", databaseFurniture);
 
-                    console.log(scene)
+            const floorItems = [];
+            for(let i=0; i<databaseFurniture.length; i++) {
+                const jsonModel =  gettingJSONs[databaseFurniture[i].meshPath];
+                const mesh = JSONLoader.parse(jsonModel);
+                const footprintVectors = databaseFurniture[i].footprints.map((v) => {
+                    return new THREE.Vector2(v[0], v[1]);
                 });
-                
+                console.log("footprint vectors", footprintVectors);
+                const footprint = new Footprint(footprintVectors);
+                const thisFloorItem = new FloorItem("askjdfn", mesh, [footprint.clone()], 15);
+                console.log("floor item before", thisFloorItem);
+
+                const p = databaseFurniture[i].position;
+                // thisFloorItem.translate(new THREE.Vector3(p[0], p[1], p[2]));
+
+                console.log("floor item after", thisFloorItem);
+
+                floorItems.push(thisFloorItem);
             }
+        }
+
+        asyncStuff();
+
+        // loadDesign(designId).then(design => {
+        //     console.log("done loading design");
+            // const furniture = design.currentFurniture;
+
+            // console.log("furniture from database, ", furniture);
+            // console.log(design.currentFurniture);
+            // floor = design.floor;
+            // floorVertices = design.floorVertices
+            // group.add(floor);
+            // group.add(...design.walls);
+            // const furniture = design.currentFurniture;
+
+            // for(let i=0; i<furniture.length; i++) {
+            //     objects.push(furniture[i]);
+            //     console.log("added furniture", furniture[i]);
+            //     //TODO: move this back into DormObject
+            //     modelLoader.load(`${process.env.PUBLIC_URL}/${furniture[i].meshPath}`, (gltf) => {
+            //         console.log("furniture", furniture[i])
+            //         furniture[i].mesh = gltf.scene;
+            //         //link meshes back to the DormObject
+            //         furniture[i].mesh.traverse((node) => {
+            //             node.item = this;
+            //             console.log("node",node)
+            //         });
+            //         scene.add(furniture[i].mesh)
+
+            //         console.log(scene)
+            //     });
+                
+            // }
             // console.log(scene);
-        })
+        // })
         
         
 

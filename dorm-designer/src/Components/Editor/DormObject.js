@@ -100,12 +100,11 @@ class Footprint {
 
 
 class DormObject {
-    constructor (id, meshPath) {
+    constructor (id, mesh) {
         this.id = id;
         this.isNew = true;
-        this.meshPath = meshPath;
-        this.mesh = new THREE.Mesh(new THREE.BoxGeometry(10,10,10), new THREE.MeshBasicMaterial('yellow'));
-        this.loadMesh();
+        this.mesh = mesh;
+        // this.loadMesh();
 
         //selection outline
         this.isSelected = false;
@@ -171,8 +170,8 @@ class DormObject {
 
 
 class FloorItem extends DormObject {
-    constructor (id, meshPath, footprints, height) {
-        super(id, meshPath);
+    constructor (id, mesh, footprints, height) {
+        super(id, mesh);
         this.position = new THREE.Vector3();
         this.rotation = 0; //y axis rotation
         this.footprints = footprints; //an array of Footprint that could collide with other footprints
@@ -188,15 +187,15 @@ class FloorItem extends DormObject {
             footprints: this.footprints.map(f => f.toJSON())
         }
     }
-    static fromJSON(json) {
-        console.log(json)
-        console.log(json.footprints, "footprint vertices :)")
-        let floorItem = new FloorItem(json._id, json.meshPath, json.footprints.map(f => Footprint.fromJSON(f)), json.height);
-        floorItem.translate(new THREE.Vector3(json.position[0], json.position[1], json.position[2]));
-        floorItem.rotate(json.rotation);
-        floorItem.isNew = false;
-        return floorItem;
-    }
+    // static fromJSON(json) {
+    //     console.log(json)
+    //     console.log(json.footprints, "footprint vertices :)")
+    //     let floorItem = new FloorItem(json._id, json.meshPath, json.footprints.map(f => Footprint.fromJSON(f)), json.height);
+    //     floorItem.translate(new THREE.Vector3(json.position[0], json.position[1], json.position[2]));
+    //     floorItem.rotate(json.rotation);
+    //     floorItem.isNew = false;
+    //     return floorItem;
+    // }
 
     translate(position) { //set the absolute position
         this.position = position;

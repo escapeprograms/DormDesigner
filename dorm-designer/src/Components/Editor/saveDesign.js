@@ -32,7 +32,9 @@ async function loadDesign(designId) {
 
     let furniture = furnitureJSON.map(json => {
         if (json.type == "floor") {
-            return FloorItem.fromJSON(json);
+            //return a flooritem object
+            // return FloorItem.fromJSON(json);
+            
         }
         //TODO: generalize
     });
