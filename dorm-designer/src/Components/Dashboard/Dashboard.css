@@ -37,3 +37,12 @@
     text-decoration: none;
     color: #fff;
 }
+
+.designContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.design {
+    padding: 12px 24px;
+}
