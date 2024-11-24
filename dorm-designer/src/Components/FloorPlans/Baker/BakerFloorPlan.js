@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getLayoutById } from '../../../services/layoutServices';
-import { createDesign } from '../../../services/designServices';
+import { getLayoutById } from '../../../services/layoutServices.js';
+import { createDesign } from '../../../services/designServices.js';
 import './BakerFloorPlan.css';
 const BakerFloorPlan = () => {
   const canvasRef = useRef(null);

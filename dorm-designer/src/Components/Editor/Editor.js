@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import axios from 'axios'; 
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
-import {getFloorMesh, getWallMeshes} from './three-objects/floor';
-import { Footprint, DormObject, FloorItem } from './DormObject';
+import {getFloorMesh, getWallMeshes} from './three-objects/floor.js';
+import { Footprint, DormObject, FloorItem } from './DormObject.js';
 import _ from 'lodash'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 // import testDesign from './three-objects/testDesign.js';
 import print from './printJSON.js';
 
