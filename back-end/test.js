@@ -45,28 +45,7 @@ async function testDatabase() {
     ];
 
     const designObject = { userId : 1,
-      vertices : [
-      [-3,-2.5],
-      [0,-2.5],
-      [0,-1.5],
-      [2,-1.5],
-      [2,-2.5],
-      [3,-2.5],
-      [3,1.5],
-      [2,1.5],
-      [2,2.5],
-      [-2,2.5],
-      [-2,1.5],
-      [-3,1.5],
-      [-3,1],
-      [-4,1],
-      [-4,0],
-      [-3,0],
-      [-3,-1],
-      [-4,-1],
-      [-4,-2],
-      [-3,-2],
-      [-3,-2.5] ], 
+      vertices : [[]], 
       furnitureIds : [] }
 
     const itemObject = {
@@ -75,12 +54,7 @@ async function testDatabase() {
       meshPath: "abc",
       position: [0, 0, 0], 
       rotation: 0,
-      footprints: [
-        {x: 0, y: 0},
-        {x: 37.75, y: 0},
-        {x: 37.75, y: 84.75},
-        {x: 0, y: 84.75}
-      ]
+      footprints: [[[1,1]]]
     };
 
     for (const layout of seedData) {
@@ -94,6 +68,7 @@ async function testDatabase() {
     console.log(`created item of ID: ${createdItemId}`)
 
     const createdDesign = await designManager.createDesign(designObject);
+    const createdDupeDesign = await designManager.createDesign(designObject);
     let createdDesignUserId = createdDesign.userId;
     console.log(`created design of user ID: ${createdDesignUserId}`);
     console.log("created design:", JSON.stringify(createdDesign, null, 2));
@@ -105,7 +80,15 @@ async function testDatabase() {
     console.log("Retrieved item:", JSON.stringify(pullItem, null, 2)); 
 
     const pullDesignItems = await designManager.getDesignsByUserId(createdDesignUserId);
-    console.log("Retrieved designs:", JSON.stringify(pullDesignItems, null, 2)); 
+    console.log("Retrieved designs:", JSON.stringify(pullDesignItems, null, 2));
+    
+    const updatedItem = await itemManager.updateItemById(createdItemId, itemObject);
+    console.log("Updated item:", JSON.stringify(updatedItem, null, 2)); 
+
+    console.log(pullDesignItems[0]._id.toString());
+    console.log(createdDesign._id);
+    const updatedDesign = await designManager.updateDesignById(createdDesign._id, designObject);
+    console.log("Updated design:", JSON.stringify(updatedDesign, null, 2));
 
     const deleted2 = await layoutManager.deleteLayoutById(createdId);
     console.log("Layout deleted.")
