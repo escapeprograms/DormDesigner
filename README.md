@@ -26,3 +26,5 @@ Build the frontend first, then run backend. Running frontend is for development 
 This is some information about connecting to MongoDB Atlas, our database solution. 
 To run the system while connected to the database:
 - Run 'npm install'
+
+Use the seed.js file to add/remove data from the database. 
