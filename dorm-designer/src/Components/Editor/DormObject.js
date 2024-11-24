@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import _ from 'lodash';
-import { getWallMeshes, getFloorMesh } from './three-objects/floor';
+import { getWallMeshes, getFloorMesh } from './three-objects/floor.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 //cursed legacy code sent by the devil himself :)

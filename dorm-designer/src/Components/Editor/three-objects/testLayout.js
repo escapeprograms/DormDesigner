@@ -3,7 +3,7 @@ import bedJSON from './bedModel.json';
 import deskJSON from './deskModel.json';
 import dresserJSON from './dresserModel.json';
 import {Footprint, DormObject, FloorItem, DormDesign, DormLayout} from "../DormObject.js";
-import {getFloorMesh, getWallMeshes} from './floor';
+import {getFloorMesh, getWallMeshes} from './floor.js';
 
 
 const databaseLayoutObject = {

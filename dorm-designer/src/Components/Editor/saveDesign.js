@@ -1,6 +1,6 @@
 import { floor } from 'lodash';
-import { updateDesignById, getDesignById } from '../../services/designServices';
-import { updateItemById, createItem, getItemById } from '../../services/itemServices';
+import { updateDesignById, getDesignById } from '../../services/designServices.js';
+import { updateItemById, createItem, getItemById } from '../../services/itemServices.js';
 import { DormDesign, FloorItem } from './DormObject.js';
 import * as THREE from 'three';
 
