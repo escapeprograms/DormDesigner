@@ -49,6 +49,8 @@ const Editor = () => {
     const mountRef = useRef(null);
     const [showPopup, setShowPopup] = useState(true);
 
+    
+
     useEffect(() => {
         const renderer = new THREE.WebGLRenderer({antialias: true});
         renderer.shadowMap.enabled = true;
@@ -76,6 +78,7 @@ const Editor = () => {
         const target = new THREE.Vector3(40, 0, -40);
         camera.lookAt(target);
 
+        // important properties
         let floorVertices;
         let floor;
         let objects = [];
@@ -86,7 +89,7 @@ const Editor = () => {
         loadDesign(designId, scene).then(design => {
             console.log(design.currentFurniture);
             floor = design.floor;
-            floorVertices = design.floorVertices
+            floorVertices = design.floorVertices;
             group.add(floor);
             group.add(...design.walls);
             const furniture = design.currentFurniture;
@@ -227,16 +230,20 @@ const Editor = () => {
 
 
         const animate = () => {
-            requestAnimationFrame(animate); 
+            requestAnimationFrame(animate);
+
+            //check collisions
             for (let i = 0; i < objects.length; i ++) {
                 objects[i].setValid();
+
+                //check wall collision
                 if (objects[i].checkWallCollisions(floor)) {
-                    console.log("WALL")
                     objects[i].setInvalid();
                 }
+
+                //check object collision with all other objects
                 for(let j=0; j<objects.length; j++) {
                     if(j !== i && objects[i].checkCollision(objects[j])) {
-                        console.log("OBJ")
                         objects[i].setInvalid();
                     }
                 }
@@ -260,7 +267,7 @@ const Editor = () => {
             {showPopup && <ControlsPopup onClose={() => setShowPopup(false)} />}
             
             <button 
-                onClick={handleSave} 
+                onClick={()=>saveDesign(designId, userId, [], [])} 
                 style={{
                     position: 'fixed',
                     bottom: '20px',

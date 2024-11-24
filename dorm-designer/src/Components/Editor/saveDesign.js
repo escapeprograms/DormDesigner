@@ -4,7 +4,12 @@ import { updateItemById, createItem, getItemById } from '../../services/itemServ
 import { DormDesign, FloorItem } from './DormObject.js';
 import * as THREE from 'three';
 
-function saveDesign(designId, floorVertices, objects) {
+function saveDesign(designId, userId, floorVertices, objects) {
+    console.log(floorVertices)
+    console.log("Saving Design!");
+    //convert floorVertices to correct format
+    let floorVerticesArr = floorVertices.map(v => [v.x, v.y]);
+
     //update existing items
     let objectIds = [];
     for (let i = 0; i < objects.length; i++) {
@@ -14,11 +19,11 @@ function saveDesign(designId, floorVertices, objects) {
 
     //create new Items if new items are ADDED
     //update design if new items are ADDED
-    // 
-    // updateDesignById(designId, {
-    //     vertices: floorVertices,
-    //     furnitureIds: objectIds
-    // });
+    updateDesignById(designId, {
+        userId: userId,
+        vertices: floorVerticesArr,
+        furnitureIds: objectIds
+    });
 }
 
 async function loadDesign(designId, scene) {

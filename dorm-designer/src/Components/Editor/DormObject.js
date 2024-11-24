@@ -185,12 +185,13 @@ class FloorItem extends DormObject {
     }
     toJSON() {
         return {
-            //id: this.id,
+            id: this.id, //.id = ._id
+            type: "floor",
             meshPath: this.meshPath,
             position: [this.position.x, this.position.y, this.position.z],
             rotation: this.rotation,
-            height: this.height,
-            footprints: this.footprints.map(f => f.toJSON())
+            footprints: this.footprints.map(f => f.toJSON()),
+            height: this.height
         }
     }
     static fromJSON(json, scene) {
