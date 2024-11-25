@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const itemSchema = new mongoose.Schema({
+const defaultItemSchema = new mongoose.Schema({
   type: { type: String, required: true, enum: ['floor', 'legged', 'wall'] }, 
   meshPath: { type: String, required: true }, 
   position: {
@@ -29,5 +29,5 @@ const itemSchema = new mongoose.Schema({
   }
 });
 
-const Item = mongoose.model('Item', itemSchema);
-export default Item;
+const DefaultItem = mongoose.model('DefaultItem', defaultItemSchema);
+export default DefaultItem;

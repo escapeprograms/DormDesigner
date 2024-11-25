@@ -20,6 +20,7 @@ async function startServer() {
     const layoutController = (await import('./controllers/layoutController.js')).default;
     const designController = (await import('./controllers/designController.js')).default;
     const itemController = (await import('./controllers/itemController.js')).default;
+    const defaultItemController = (await import('./controllers/defaultItemController.js')).default;
 
     
     const app = express();
@@ -29,6 +30,7 @@ async function startServer() {
     app.use('/api/layout', layoutController);
     app.use('/api/items', itemController);
     app.use('/api/design', designController);
+    app.use('/api/defitems', defaultItemController);
     app.use(express.static(path.join(__dirname, '../dorm-designer/build')));
     
     app.get('*', (req, res) => {
