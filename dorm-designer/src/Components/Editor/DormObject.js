@@ -50,15 +50,15 @@ class Footprint {
 
     toJSON() {
         //return an array of anchor vertices
-        let anchors = []; //[[x,y], ...]
-        for (let j = 0; j < this.vertices.length; j ++) {
-            //find anchor information
-            let dist = this.dists[j];
-            let angle2 = this.angleOffsets[j];
+        // let anchors = []; //[[x,y], ...]
+        // for (let j = 0; j < this.vertices.length; j ++) {
+        //     //find anchor information
+        //     let dist = this.dists[j];
+        //     let angle2 = this.angleOffsets[j];
             
-            anchors.push([Math.cos(angle2) * dist, Math.sin(angle2) * dist])
-        }
-        return anchors;
+        //     anchors.push([Math.cos(angle2) * dist, Math.sin(angle2) * dist])
+        // }
+        return this.anchors.map(a => [a.x, a.y]);
     }
     static fromJSON(vertices) { //[[x,y], ...]
         return new Footprint(vertices.map(v => new THREE.Vector2(v[0], v[1])));
@@ -185,7 +185,7 @@ class FloorItem extends DormObject {
     }
     toJSON() {
         return {
-            id: this.id, //.id = ._id
+            // id: this.id, //.id = ._id
             type: "floor",
             meshPath: this.meshPath,
             position: [this.position.x, this.position.y, this.position.z],
