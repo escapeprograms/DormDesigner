@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import Design from 'back-end/models/designModel.js'
-import Item from 'back-end/models/itemModel.js'
-import Layout from 'back-end/models/layoutModel.js'
-import DefaultItem from './models/defaultItemModel';
+import Design from './models/designModel.js'
+import Item from './models/itemModel.js'
+import Layout from './models/layoutModel.js'
+import DefaultItem from './models/defaultItemModel.js';
 
 
 const uri = "mongodb+srv://ananyakoduru22:wJJdnMfiXTaPEyFs@cluster0.pjmeg.mongodb.net/dormDesigner?retryWrites=true&w=majority"
@@ -58,8 +58,124 @@ const addLayouts = async (layouts) => {
 
 const run = async () => { // edit this to add/remove data by calling the functions written above
   await connectDB();
-
+  
   mongoose.connection.close();
 };
 
 run();
+
+
+/* Populate DefaultItems
+let items = [{
+    "id":"bed",
+    "type": "floor",
+    "meshPath": "bed-centered.glb",
+    "position": [
+        49.9539081203942,
+        2.0888125633705855e-14,
+        -94.0717548204258
+    ],
+    "rotation": 0,
+    "footprints": [
+        [
+            [
+                -42.4,
+                -18.9
+            ],
+            [
+                42.4,
+                -18.9
+            ],
+            [
+                42.4,
+                18.9
+            ],
+            [
+                -42.4,
+                18.9
+            ],
+            [
+                -42.4,
+                -18.9
+            ]
+        ]
+    ],
+    "height": 0
+},
+///////////////////////////////
+{
+  "id":"desk",
+  "type": "floor",
+  "meshPath": "desk-centered.glb",
+  "position": [
+      99,
+      0,
+      -25
+  ],
+  "rotation": 0,
+  "footprints": [
+      [
+          [
+              -12,
+              -24
+          ],
+          [
+              12,
+              -24
+          ],
+          [
+              12,
+              24
+          ],
+          [
+              -12,
+              24
+          ],
+          [
+              -12,
+              -24
+          ]
+      ]
+  ],
+  "height": 0
+},
+///////////////////////////////
+{
+  "id": "dresser",
+  "type": "floor",
+  "meshPath": "dresser-centered2.glb",
+  "position": [
+      150,
+      0,
+      -16
+  ],
+  "rotation": 1.57,
+  "footprints": [
+      [
+          [
+              -12,
+              -15
+          ],
+          [
+              12,
+              -15
+          ],
+          [
+              12,
+              15
+          ],
+          [
+              -12,
+              15
+          ],
+          [
+              -12,
+              -15
+          ]
+      ]
+  ],
+  "height": 0
+}
+]
+  await addDefaultItems(items)
+  */

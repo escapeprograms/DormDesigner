@@ -13,9 +13,6 @@ import { useParams } from 'react-router-dom';
 import {saveDesign, loadDesign} from './saveDesign.js';
  
 
-const handleSave = () => {
-    console.log("save button clicked");
-};
 const ControlsPopup = ({ onClose }) => {
     return (
         <div style={{
@@ -48,6 +45,9 @@ const Editor = () => {
     const { userId, designId } = useParams();
     const mountRef = useRef(null);
     const [showPopup, setShowPopup] = useState(true);
+    const floorVertices = useRef([])
+    const objects = useRef([])
+    
 
     useEffect(() => {
         const renderer = new THREE.WebGLRenderer({antialias: true});
@@ -76,32 +76,27 @@ const Editor = () => {
         const target = new THREE.Vector3(40, 0, -40);
         camera.lookAt(target);
 
-        let floorVertices;
+        // important properties
         let floor;
-        let objects = [];
-
         // ----------------------------------------------------------
         const modelLoader = new GLTFLoader();
 
         loadDesign(designId, scene).then(design => {
-            console.log(design.currentFurniture);
+            console.log("Furniture List:", design.currentFurniture);
+
             floor = design.floor;
-            floorVertices = design.floorVertices
+            floorVertices.current = design.floorVertices;
+
             group.add(floor);
             group.add(...design.walls);
             const furniture = design.currentFurniture;
-
+            
             for(let i=0; i<furniture.length; i++) {
-                objects.push(furniture[i]);
-                console.log("added furniture", furniture[i]);
-                
-                
+                objects.current.push(furniture[i]);
             }
-            // console.log(scene);
+
         })
         
-        
-
 
         //User interactions and events
         let hoverSelection = null; //current mouse hover selection
@@ -125,7 +120,7 @@ const Editor = () => {
             raycaster.setFromCamera(mouse, camera);
           
             // Intersect the ray with the scene
-            const intersects = raycaster.intersectObjects(objects.map(o => o.mesh));
+            const intersects = raycaster.intersectObjects(objects.current.map(o => o.mesh));
           
             // Check if the first intersected object is your cube
             if (intersects.length > 0) {
@@ -227,17 +222,21 @@ const Editor = () => {
 
 
         const animate = () => {
-            requestAnimationFrame(animate); 
-            for (let i = 0; i < objects.length; i ++) {
-                objects[i].setValid();
-                if (objects[i].checkWallCollisions(floor)) {
-                    console.log("WALL")
-                    objects[i].setInvalid();
+            requestAnimationFrame(animate);
+
+            //check collisions
+            for (let i = 0; i < objects.current.length; i ++) {
+                objects.current[i].setValid();
+
+                //check wall collision
+                if (objects.current[i].checkWallCollisions(floor)) {
+                    objects.current[i].setInvalid();
                 }
-                for(let j=0; j<objects.length; j++) {
-                    if(j !== i && objects[i].checkCollision(objects[j])) {
-                        console.log("OBJ")
-                        objects[i].setInvalid();
+
+                //check object collision with all other objects
+                for(let j=0; j<objects.current.length; j++) {
+                    if(j !== i && objects.current[i].checkCollision(objects.current[j])) {
+                        objects.current[i].setInvalid();
                     }
                 }
             }
@@ -260,7 +259,7 @@ const Editor = () => {
             {showPopup && <ControlsPopup onClose={() => setShowPopup(false)} />}
             
             <button 
-                onClick={handleSave} 
+                onClick={()=>saveDesign(designId, userId, floorVertices.current, objects.current)} 
                 style={{
                     position: 'fixed',
                     bottom: '20px',

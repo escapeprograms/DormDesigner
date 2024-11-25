@@ -4,21 +4,34 @@ import { updateItemById, createItem, getItemById } from '../../services/itemServ
 import { DormDesign, FloorItem } from './DormObject.js';
 import * as THREE from 'three';
 
-function saveDesign(designId, floorVertices, objects) {
+function saveDesign(designId, userId, floorVertices, objects) {
+    console.log("Saving Design!");    
+
+    //convert floorVertices to correct format
+    let floorVerticesArr = floorVertices.map(v => [v.x, v.y]);
+
+
     //update existing items
     let objectIds = [];
     for (let i = 0; i < objects.length; i++) {
+        console.log("item JSON:", objects[i].toJSON())
         updateItemById(objects[i].id, objects[i].toJSON());
         objectIds.push(objects[i].id);
     }
 
     //create new Items if new items are ADDED
     //update design if new items are ADDED
-    // 
-    // updateDesignById(designId, {
-    //     vertices: floorVertices,
+    // console.log("Updated Design Object:",{
+    //     userId: userId,
+    //     vertices: floorVerticesArr,
     //     furnitureIds: objectIds
     // });
+
+    updateDesignById(designId, {
+        userId: userId,
+        vertices: floorVerticesArr,
+        furnitureIds: objectIds
+    });
 }
 
 async function loadDesign(designId, scene) {

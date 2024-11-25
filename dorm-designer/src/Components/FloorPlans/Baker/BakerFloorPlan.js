@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getLayoutById } from '../../../services/layoutServices.js';
 import { createDesign } from '../../../services/designServices.js';
+import { createItem } from '../../../services/itemServices.js';
+import { getDefaultItemById } from '../../../services/defaultItemServices.js';
+
 import './BakerFloorPlan.css';
 const BakerFloorPlan = () => {
   const canvasRef = useRef(null);
@@ -72,9 +75,22 @@ const BakerFloorPlan = () => {
 
   const handleCreate = async () => {
     try {
-      const layout = await getLayoutById("6735729ec81258da256cb3e0");
+      const layout = await getLayoutById("6735729ec81258da256cb3e0"); //pls dont hard code
       const vertices = layout.vertices;
-      const newDesign = await createDesign({ userId: userId, vertices: vertices, furnitureIds:layout.defaultFurnitureIds});
+
+      //Create all default items in parallel
+      let promiseIds = layout.defaultFurnitureIds.map(async furnitureId => {
+        let defaultFurniture = await getDefaultItemById(furnitureId);
+        const { id, _id, ...furniture } = defaultFurniture; //remove id and _id properties
+        let res = await createItem(furniture);
+        return res._id;
+      });
+
+      //wait for all default furnitures to process and create
+      let defaultFurnitureIds = await Promise.all(promiseIds);
+      
+      //create new design
+      const newDesign = await createDesign({ userId: userId, vertices: vertices, furnitureIds:defaultFurnitureIds});
       navigate(`/editor/${userId}/${newDesign._id}`);
     } catch (error) {
 

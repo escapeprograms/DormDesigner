@@ -10,7 +10,7 @@ class DefaultItemManager {
 
     async getDefaultItemById(id) {
         try {
-            return await DefaultItem.findById(id);
+            return await DefaultItem.findOne({ id });
         } catch (error) {
             throw new Error("Item not found");
         }
@@ -30,4 +30,4 @@ class DefaultItemManager {
 }
 
 
-export default ItemManager;
+export default DefaultItemManager;
