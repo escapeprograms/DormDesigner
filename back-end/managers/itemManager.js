@@ -8,11 +8,7 @@ class ItemManager {
 
     async getItemById(id) {
         try {
-            const item = await Item.findOne({ id }); // Search by `id` field
-            if (!item) {
-                throw new Error("Item not found");
-            }
-            return item;
+            return await Item.findById(id);
         } catch (error) {
             throw new Error("Item not found");
         }
@@ -20,28 +16,27 @@ class ItemManager {
 
     async updateItemById(id, data) {
         try {
-            const updatedItem = await Item.findOneAndUpdate({ id }, data, { new: true });
+            const updatedItem = await Item.findByIdAndUpdate(id, data, { new: true }); 
             if (!updatedItem) {
-                throw new Error("Failed to update item");
+                throw new Error("Failed to update item with the given _id");
             }
             return updatedItem;
         } catch (error) {
-            throw new Error("Failed to update item");
+            throw new Error("Failed to update item with the given _id");
         }
     }
 
     async deleteItemById(id) {
         try {
-            const deletedItem = await Item.findOneAndDelete({ id });
+            const deletedItem = await Item.findByIdAndDelete(id); 
             if (!deletedItem) {
-                throw new Error("Failed to delete item");
+                throw new Error("Failed to delete item with the given _id");
             }
             return deletedItem;
         } catch (error) {
-            throw new Error("Failed to delete item");
+            throw new Error("Failed to delete item with the given _id");
         }
     }
 }
-
 
 export default ItemManager;
