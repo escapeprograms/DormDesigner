@@ -78,20 +78,18 @@ const BakerFloorPlan = () => {
       const layout = await getLayoutById("6735729ec81258da256cb3e0"); //pls dont hard code
       const vertices = layout.vertices;
 
-      //Create Default Items in Parallel
-      //awaiting 
-      let defaultFurnitureIds = layout.defaultFurnitureIds.map(async id => {
-        console.log("ID:", id)
-        let furniture = await getDefaultItemById(id);
-        console.log("Retreived Default Furniture:", furniture);
+      //Create all default items in parallel
+      let promiseIds = layout.defaultFurnitureIds.map(async furnitureId => {
+        let defaultFurniture = await getDefaultItemById(furnitureId);
+        const { id, _id, ...furniture } = defaultFurniture; //remove id and _id properties
         let res = await createItem(furniture);
-        console.log("New Furniture Created:", res)
         return res._id;
       });
-      //wait for all furnitures to process and create
-      await Promise.all(defaultFurnitureIds);
-      console.log("defaultFurnitureIds:", defaultFurnitureIds)
+
+      //wait for all default furnitures to process and create
+      let defaultFurnitureIds = await Promise.all(promiseIds);
       
+      //create new design
       const newDesign = await createDesign({ userId: userId, vertices: vertices, furnitureIds:defaultFurnitureIds});
       navigate(`/editor/${userId}/${newDesign._id}`);
     } catch (error) {

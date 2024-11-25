@@ -5,7 +5,7 @@ const defaultItemSchema = new mongoose.Schema({
   type: { type: String, required: true, enum: ['floor', 'legged', 'wall'] }, 
   meshPath: { type: String, required: true }, 
   position: {
-    type: [Number], 
+    type: [Number],
     validate: {
       validator: function (value) {
         // Wall items should have 2 coordinates (x, y), others can have 3 (x, y, z)

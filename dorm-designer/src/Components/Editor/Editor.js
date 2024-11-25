@@ -13,9 +13,6 @@ import { useParams } from 'react-router-dom';
 import {saveDesign, loadDesign} from './saveDesign.js';
  
 
-const handleSave = () => {
-    console.log("save button clicked");
-};
 const ControlsPopup = ({ onClose }) => {
     return (
         <div style={{
@@ -85,7 +82,8 @@ const Editor = () => {
         const modelLoader = new GLTFLoader();
 
         loadDesign(designId, scene).then(design => {
-            console.log(design.currentFurniture);
+            console.log("Furniture List:", design.currentFurniture);
+
             floor = design.floor;
             floorVertices.current = design.floorVertices;
 
@@ -94,10 +92,7 @@ const Editor = () => {
             const furniture = design.currentFurniture;
             
             for(let i=0; i<furniture.length; i++) {
-                // setObjects([...objects, furniture[i]]);
                 objects.current.push(furniture[i]);
-
-                console.log("added furniture", furniture[i]);
             }
 
         })
