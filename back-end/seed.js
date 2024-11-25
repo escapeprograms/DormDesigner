@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Design from 'back-end/models/designModel.js'
 import Item from 'back-end/models/itemModel.js'
 import Layout from 'back-end/models/layoutModel.js'
+import DefaultItem from './models/defaultItemModel';
 
 
 const uri = "mongodb+srv://ananyakoduru22:wJJdnMfiXTaPEyFs@cluster0.pjmeg.mongodb.net/dormDesigner?retryWrites=true&w=majority"
@@ -23,6 +24,15 @@ const addDesigns = async (designs) => {
     console.log(`${result.length} designs added successfully`);
   } catch (error) {
     console.error('Error adding designs:', error.message);
+  }
+};
+
+const addDefaultItems = async (items) => {
+  try {
+    const result = await DefaultItem.insertMany(items);
+    console.log(`${result.length} default items added successfully`);
+  } catch (error) {
+    console.error('Error adding default items:', error.message);
   }
 };
 
