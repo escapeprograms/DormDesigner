@@ -4,7 +4,7 @@ import DefaultItemManager from '../managers/defaultItemManager.js';
 const router = express.Router();
 const itemManager = new DefaultItemManager();
 
-// GET default item by ID
+// GET default item by _id
 router.get('/:id', async (req, res) => {
     try {
         const item = await itemManager.getDefaultItemById(req.params.id);

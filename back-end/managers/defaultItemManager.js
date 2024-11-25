@@ -10,11 +10,7 @@ class DefaultItemManager {
 
     async getDefaultItemById(id) {
         try {
-            const item = await DefaultItem.findOne({ id }); // Search by `id` field
-            if (!item) {
-                throw new Error("Item not found");
-            }
-            return item;
+            return await DefaultItem.findById(id);
         } catch (error) {
             throw new Error("Item not found");
         }
@@ -22,13 +18,13 @@ class DefaultItemManager {
 
     async deleteDefaultItemById(id) {
         try {
-            const deletedItem = await DefaultItem.findOneAndDelete({ id });
+            const deletedItem = await DefaultItem.findByIdAndDelete(id); 
             if (!deletedItem) {
-                throw new Error("Failed to delete item");
+                throw new Error("Failed to delete item with the given _id");
             }
             return deletedItem;
         } catch (error) {
-            throw new Error("Failed to delete item");
+            throw new Error("Failed to delete item with the given _id");
         }
     }
 }
