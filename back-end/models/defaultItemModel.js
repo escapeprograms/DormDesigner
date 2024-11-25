@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const defaultItemSchema = new mongoose.Schema({
+  id: { type: String, required: true},
   type: { type: String, required: true, enum: ['floor', 'legged', 'wall'] }, 
   meshPath: { type: String, required: true }, 
   position: {
