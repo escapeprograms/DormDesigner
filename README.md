@@ -15,7 +15,7 @@ Inside the `DormDesigner` folder, run `npm run dev set up`.
 # Running
 One-step build and run: `npm run .` in `DormDesigner`
 
-In development, you can install and run parts separately:
+In development, you can build and run parts separately:
 
 Build frontend: `npm run build` in `dorm-designer`
 
