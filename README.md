@@ -13,18 +13,15 @@ Clone the project with `git clone https://github.com/escapeprograms/DormDesigner
 Inside the `DormDesigner` folder, run `npm run dev set up`.
 
 # Running
-
-Run backend: `node .` in `DormDesigner`
-Run frontend: `npm start` in `dorm-designer`
-Build frontend: `npm run build` in `dorm-designer`
 One-step build and run: `npm run .` in `DormDesigner`
 
-Build the frontend first, then run backend. Running frontend is for development only.
+In development, you can install and run parts separately:
 
-### Database information
+Build frontend: `npm run build` in `dorm-designer`
 
-This is some information about connecting to MongoDB Atlas, our database solution. 
-To run the system while connected to the database:
-- Run 'npm install'
+Run frontend: `npm start` in `dorm-designer`
 
+Run backend: `node .` in `DormDesigner`
+
+# Database
 Use the seed.js file to add/remove data from the database. 
