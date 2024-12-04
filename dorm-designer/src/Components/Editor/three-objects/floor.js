@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 
-function getFloorMesh(scene, vertices, color) { //vertices: [THREE.vector2]
+function getFloorMesh(vertices, color) { //vertices: [THREE.vector2]
     
     const shape = new THREE.Shape( vertices );
 
@@ -13,14 +13,14 @@ function getFloorMesh(scene, vertices, color) { //vertices: [THREE.vector2]
     return mesh;
 }
 
-function getWallMeshes(scene, vertices, color, height) { //vertices: [THREE.vector2]
+function getWallMeshes(vertices, color, height) { //vertices: [THREE.vector2]
     let meshes = [];
     const depth = 0.1
     for (let i = 0; i < vertices.length-1; i++) {
         let width = vertices[i].distanceTo(vertices[i+1])
         let wallGeometry = new THREE.BoxGeometry(width+depth, depth, height); //width+depth to extend at the corners
         let wallMesh = new THREE.Mesh( wallGeometry, new THREE.MeshLambertMaterial( { color: color, side: THREE.DoubleSide } ) );
-        scene.add(wallMesh);
+        // scene.add(wallMesh);
 
 
 

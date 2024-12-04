@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/design';
+// const API_URL = 'https://dormdesignerws.onrender.com/api/design';
+
+const API_URL_base = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = API_URL_base + "/design";
+
 
 // NOTE: When retrieving designs, to update indivdually after pulling by userId, use the available id property (not userId) in the other functions as the parameter to update design 
 
@@ -16,9 +20,20 @@ export const getDesignsByUserId = async (userId) => {
     }
 };
 
+export const getDesignById = async (id) => {
+    try {
+        const response = await axios.get(`${API_URL}/user/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching design:', error);
+        throw error;
+    }
+};
+
 // Create a new design
 export const createDesign = async (designData) => {
     try {
+        console.log(designData, "post data")
         const response = await axios.post(API_URL, designData);
         return response.data;
     } catch (error) {

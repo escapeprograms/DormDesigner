@@ -5,7 +5,8 @@
   "main": "back-end/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    ".": "nodemon back-end/index.js"
+    ".": "cd dorm-designer && npm run build && cd .. && node .",
+    "dev set up": "npm i && cd dorm-designer && npm install && npm i react-router-dom && npm i react-scripts && cd .. && cd back-end && npm install && cd .."
   },
   "author": "",
   "license": "ISC",

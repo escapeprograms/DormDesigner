@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 
-const itemSchema = new mongoose.Schema({
+const defaultItemSchema = new mongoose.Schema({
+  id: { type: String, required: true},
   type: { type: String, required: true, enum: ['floor', 'legged', 'wall'] }, 
   meshPath: { type: String, required: true }, 
   position: {
-    type: [Number], 
+    type: [Number],
     validate: {
       validator: function (value) {
         // Wall items should have 2 coordinates (x, y), others can have 3 (x, y, z)
@@ -29,5 +30,5 @@ const itemSchema = new mongoose.Schema({
   }
 });
 
-const Item = mongoose.model('Item', itemSchema);
-export default Item;
+const DefaultItem = mongoose.model('DefaultItem', defaultItemSchema);
+export default DefaultItem;

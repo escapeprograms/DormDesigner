@@ -45,76 +45,64 @@ async function testDatabase() {
     ];
 
     const designObject = { userId : 1,
-      vertices : [
-      [-3,-2.5],
-      [0,-2.5],
-      [0,-1.5],
-      [2,-1.5],
-      [2,-2.5],
-      [3,-2.5],
-      [3,1.5],
-      [2,1.5],
-      [2,2.5],
-      [-2,2.5],
-      [-2,1.5],
-      [-3,1.5],
-      [-3,1],
-      [-4,1],
-      [-4,0],
-      [-3,0],
-      [-3,-1],
-      [-4,-1],
-      [-4,-2],
-      [-3,-2],
-      [-3,-2.5] ], 
+      vertices : [[]], 
       furnitureIds : [] }
 
     const itemObject = {
-      id: "54a5732f-1eb7-449e-89d3-40db1be2d31d", 
-      type: "floor", 
-      mesh: {},
-      position: [0, 0, 0], 
-      rotation: 0,
-      footprints: [
-        {x: 0, y: 0},
-        {x: 37.75, y: 0},
-        {x: 37.75, y: 84.75},
-        {x: 0, y: 84.75}
-      ]
-    };
+      "type":"floor",
+      "meshPath":"bed-centered.glb",
+      "position":[64.50402719706862,2.1060644154870462e-14,-94.84870916805723],
+      "rotation":0,"footprints":[[[-42.4,-18.899999999999995],[42.4,-18.899999999999995],[42.4,18.899999999999995],[-42.4,18.899999999999995],[-42.4,-18.899999999999995]]],
+      "height":0};
 
-    for (const layout of seedData) {
-      const createdLayout = await layoutManager.createLayout(layout);
-      createdId = createdLayout._id;
-      console.log(`Inserted layout with ID: ${createdLayout._id}`);
-    }
+      const updatedItemObject = {
+        "type":"floor",
+        "meshPath":"testval",
+        "position":[64.50402719706862,2.1060644154870462e-14,-94.84870916805723],
+        "rotation":0,"footprints":[[[-42.4,-18.899999999999995],[42.4,-18.899999999999995],[42.4,18.899999999999995],[-42.4,18.899999999999995],[-42.4,-18.899999999999995]]],
+        "height":0};
+
+    // for (const layout of seedData) {
+    //   const createdLayout = await layoutManager.createLayout(layout);
+    //   createdId = createdLayout._id;
+    //   console.log(`Inserted layout with ID: ${createdLayout._id}`);
+    // }
 
     const createdItem = await itemManager.createItem(itemObject);
     let createdItemId = createdItem.id;
     console.log(`created item of ID: ${createdItemId}`)
 
-    const createdDesign = await designManager.createDesign(designObject);
-    let createdDesignUserId = createdDesign.userId;
-    console.log(`created design of user ID: ${createdDesignUserId}`);
-    console.log("created design:", JSON.stringify(createdDesign, null, 2));
+    // const createdDesign = await designManager.createDesign(designObject);
+    // const createdDupeDesign = await designManager.createDesign(designObject);
+    // let createdDesignUserId = createdDesign.userId;
+    // console.log(`created design of user ID: ${createdDesignUserId}`);
+    // console.log("created design:", JSON.stringify(createdDesign, null, 2));
 
-    const pullLayout = await layoutManager.getLayoutById(createdId);
-    console.log("Retrieved layout:", JSON.stringify(pullLayout, null, 2)); 
+    // const pullLayout = await layoutManager.getLayoutById(createdId);
+    // console.log("Retrieved layout:", JSON.stringify(pullLayout, null, 2)); 
 
     const pullItem = await itemManager.getItemById(createdItemId);
     console.log("Retrieved item:", JSON.stringify(pullItem, null, 2)); 
 
-    const pullDesignItems = await designManager.getDesignsByUserId(createdDesignUserId);
-    console.log("Retrieved designs:", JSON.stringify(pullDesignItems, null, 2)); 
+    // const pullDesignItems = await designManager.getDesignsByUserId(createdDesignUserId);
+    // console.log("Retrieved designs:", JSON.stringify(pullDesignItems, null, 2));
+    
+    const updatedItem = await itemManager.updateItemById(createdItemId, updatedItemObject);
+    console.log("Updated item:", JSON.stringify(updatedItem, null, 2)); 
 
-    const deleted2 = await layoutManager.deleteLayoutById(createdId);
-    console.log("Layout deleted.")
+    // console.log(pullDesignItems[0]._id.toString());
+    // console.log(createdDesign._id);
+    // const updatedDesign = await designManager.updateDesignById(createdDesign._id, designObject);
+    // console.log("Updated design:", JSON.stringify(updatedDesign, null, 2));
+
+    // const deleted2 = await layoutManager.deleteLayoutById(createdId);
+    // console.log("Layout deleted.")
 
     const deletedItem = await itemManager.deleteItemById(createdItemId);
     console.log("Item deleted.")
 
-    const deletedDesign = await designManager.deleteDesignById(createdDesign._id);
-    console.log("Design deleted.")
+    // const deletedDesign = await designManager.deleteDesignById(createdDesign._id);
+    // console.log("Design deleted.")
 
   } catch (error) {
     console.error("Error testing database:", error);

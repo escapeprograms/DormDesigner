@@ -2,12 +2,14 @@
   "name": "dorm-designer",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@clerk/clerk-react": "^5.15.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.7",
+    "lodash": "^4.17.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",
@@ -19,7 +21,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "unit test": "npx mocha C:\\Users\\17863\\Documents\\GitHub\\DormDesigner2\\dorm-designer\\src\\services\\designServices.test.mjs"
   },
   "eslintConfig": {
     "extends": [
@@ -38,5 +41,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.26.0",
+    "axios-mock-adapter": "^2.1.0",
+    "babel-jest": "^29.7.0",
+    "chai": "^5.1.2",
+    "mocha": "^10.8.2"
   }
 }
