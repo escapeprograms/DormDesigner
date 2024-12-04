@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { getFloorMesh, getWallMeshes } from './three-objects/floor';
@@ -38,6 +39,12 @@ const ControlsPopup = ({ onClose }) => {
 const Editor = () => {
     const mountRef = useRef(null);
     const [showPopup, setShowPopup] = useState(true);
+    const navigate = useNavigate();
+
+    // Handle back navigation
+    const handleBack = () => {
+        navigate(`/`); // Navigate to the previous page
+    };
 
     useEffect(() => {
         const scene = new THREE.Scene();
@@ -217,6 +224,24 @@ const Editor = () => {
                 }}
             >
                 ?
+            </button>
+            {/* Back Button */}
+            <button
+                onClick={handleBack}
+                style={{
+                    position: 'fixed',
+                    top: '20px',
+                    left: '20px',
+                    backgroundColor: '#6c757d', // Grey color
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '10px 20px',
+                    cursor: 'pointer',
+                    zIndex: 1000,
+                }}
+            >
+                Back
             </button>
         </div>
     );
