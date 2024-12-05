@@ -56,6 +56,7 @@ const Dashboard = () => {
         <h1>Your Designs</h1>
         <div className="buttons">
           <div className="button" onClick={handleNewDesign}>New Design</div>
+          <div className = "button">Delete Design</div>
           <div className="button">Help</div>
           <div className="button" onClick={handleSignOut}>Sign Out</div>
         </div>
