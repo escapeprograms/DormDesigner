@@ -67,3 +67,8 @@
     align-items: center;
     color:#000
 }
+
+.delete-button {
+    size: 50%;
+    cursor: pointer;
+}

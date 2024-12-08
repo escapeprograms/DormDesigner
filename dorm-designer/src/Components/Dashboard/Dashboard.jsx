@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useClerk } from '@clerk/clerk-react';
-import { getDesignsByUserId, createDesign } from '../../services/designServices.js';
+import { getDesignsByUserId, deleteDesignById, createDesign } from '../../services/designServices.js';
 import deleteIcon from '../Assets/delete.png';
 
 const Dashboard = () => {
@@ -85,7 +85,9 @@ const Dashboard = () => {
                   */}
                   Untitled Design 1
                 </Link>
-                <img src={deleteIcon} alt={"delete"} className = "deleteButton"/>
+                <img src={deleteIcon} alt={"delete"} className = "delete-button"
+                onClick={deleteDesignById(design._id)}
+                />
               </li>
             ))}
           </ul>
