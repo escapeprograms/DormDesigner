@@ -30,7 +30,7 @@ function saveDesign(designId, userId, floorVertices, objects) {
     updateDesignById(designId, {
         userId: userId,
         vertices: floorVerticesArr,
-        furnitureIds: objectIds
+        furnitureIds: objectIds, 
     });
 }
 

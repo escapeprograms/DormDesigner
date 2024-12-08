@@ -58,7 +58,7 @@ const addLayouts = async (layouts) => {
 
 const run = async () => { // edit this to add/remove data by calling the functions written above
   await connectDB();
-  
+  Design.deleteMany({furnitureIds: ['bed', 'desk', 'dresser']});
   mongoose.connection.close();
 };
 

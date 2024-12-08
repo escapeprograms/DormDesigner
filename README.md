@@ -10,12 +10,12 @@ To merge a subteam's branch into main, it requires approval from at least 1 repr
 
 Clone the project with `git clone https://github.com/escapeprograms/DormDesigner.git`
 
-Inside the `DormDesigner` folder, run `npm run dev set up`.
+Inside the `DormDesigner` folder, run `npm run "dev set up"`.
 
 # Running
 One-step build and run: `npm run .` in `DormDesigner`
 
-In development, you can install and run parts separately:
+In development, you can build and run parts separately:
 
 Build frontend: `npm run build` in `dorm-designer`
 

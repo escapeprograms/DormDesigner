@@ -5,41 +5,19 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 // import testDesign from './three-objects/testDesign.js';
 
 import { useParams } from 'react-router-dom';
-import { loadDesign, saveDesign } from './saveDesign.js';
- 
 
-const ControlsPopup = ({ onClose }) => {
-    return (
-        <div style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: 'white',
-            color: 'black',
-            padding: '20px',
-            borderRadius: '8px',
-            boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
-            zIndex: 1000
-        }}>
-            <h2 style={{color: 'black'}}>Editor Controls</h2>
-            <ul>
-                <li>Left Click Drag - rotate camera</li>
-                <li>Right Click Drag - pan camera</li>
-                <li>Click Dorm Item - select</li>
-                <li>Click + Drag Dorm Item - move item</li>
-                <li>Select Item, then left/right arrow keys - rotate item</li>
-            </ul>
-            <button onClick={onClose}>Close</button>
-        </div>
-    );
-};
+import {saveDesign, loadDesign} from './saveDesign.js';
+import {ControlsPopup, NamePopup} from './Popups.js';
+
+ 
 
 
 const Editor = () => {
     const { userId, designId } = useParams();
     const mountRef = useRef(null);
     const [showPopup, setShowPopup] = useState(true);
+    const [showNamePopup, setShowNamePopup] = useState(false);
+    const [designName, setDesignName] = useState("");
     const floorVertices = useRef([])
     const objects = useRef([])
     const navigate = useNavigate();
@@ -250,21 +228,59 @@ const Editor = () => {
         };
     }, []);
 
+    function handleSave() {
+        console.log("design name: ", designName);
+        if(designName === "") {
+            setShowNamePopup(true);
+        } else {
+            saveDesign(designId, userId, floorVertices.current, objects.current);
+        }
+    }
+
+    function handleNameChange(event) {
+        setDesignName(event.target.value);
+    }
+
     return (
         <div ref={mountRef}>
             {showPopup && <ControlsPopup onClose={() => setShowPopup(false)} />}
-            
+            {showNamePopup && <NamePopup onClose={() => setShowNamePopup(false)} onSave={() => saveDesign(designId, userId, floorVertices.current, objects.current)}/>}
+            <input 
+                type="text"
+                value={designName}
+                onChange={handleNameChange}
+                style={{
+                        position: 'fixed',
+                        top: '20px',
+                        left: '20px',
+                        height: '40px',
+                        boxSizing: 'border-box',
+
+                        background: "rgba(0, 0, 0, 0)",
+                        color: "white",
+                        border: '0px',
+                        outline: 'none',
+
+                        fontSize: '2rem'
+                }}
+                placeholder='Untitled Design'
+            >
+            </input>
             <button 
-                onClick={()=>saveDesign(designId, userId, floorVertices.current, objects.current)} 
+                // onClick={()=>saveDesign(designId, userId, floorVertices.current, objects.current)}
+                onClick={()=>handleSave()} 
                 style={{
                     position: 'fixed',
                     bottom: '20px',
                     right: '80px', // Positioned to the left of the help button
+                    height: '40px',
+                    padding: '10px 20px',
+
                     backgroundColor: '#800000',
                     color: 'white',
+
                     border: 'none',
                     borderRadius: '8px',
-                    padding: '10px 20px',
                     cursor: 'pointer',
                     zIndex: 1000,
                 }}

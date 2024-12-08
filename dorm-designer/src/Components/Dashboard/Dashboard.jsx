@@ -56,6 +56,7 @@ const Dashboard = () => {
         <h1>Your Designs</h1>
         <div className="buttons">
           <div className="button" onClick={handleNewDesign}>New Design</div>
+          <div className = "button">Delete Design</div>
           <div className="button">Help</div>
           <div className="button" onClick={handleSignOut}>Sign Out</div>
         </div>
@@ -68,7 +69,10 @@ const Dashboard = () => {
             {designs.map((design) => (
               <li key={design._id} className="design-item">
                 <Link to={`/editor/${userId}/${design._id}`} className="design-link">
-                  {design._id}
+                  {/*original code: {design._id} 
+                      to change to when database is changed to include name: {design.name}
+                  */}
+                  Untitled Design 1
                 </Link>
               </li>
             ))}
