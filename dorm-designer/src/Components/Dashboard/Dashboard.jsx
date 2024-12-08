@@ -86,7 +86,10 @@ const Dashboard = () => {
                   Untitled Design 1
                 </Link>
                 <img src={deleteIcon} alt={"delete"} className = "delete-button"
-                onClick={deleteDesignById(design._id)}
+                onClick={() => {
+                  deleteDesignById(design._id)
+                  navigate('/')
+                }}
                 />
               </li>
             ))}
