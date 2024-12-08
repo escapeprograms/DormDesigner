@@ -80,7 +80,10 @@ const Dashboard = () => {
             {designs.map((design) => (
               <li key={design._id} className="design-item">
                 <Link to={`/editor/${userId}/${design._id}`} className="design-link">
-                  {design._id}
+                  {/*original code: {design._id} 
+                      to change to when database is changed to include name: {design.name}
+                  */}
+                  Untitled Design 1
                 </Link>
               </li>
             ))}

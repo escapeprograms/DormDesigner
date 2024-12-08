@@ -138,6 +138,8 @@ const BakerFloorPlan = () => {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
+
+    console.log(`Clicked at: (${x}, ${y})`);
     
     // Check which room was clicked
     const clickedRoom = rooms.find(room => 
