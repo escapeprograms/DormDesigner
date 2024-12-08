@@ -20,8 +20,5 @@
     "react-scripts": "^5.0.1"
   },
   "type": "module",
-  "keywords": [],
-  "devDependencies": {
-    "cypress": "^13.16.1"
-  }
+  "keywords": []
 }

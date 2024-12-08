@@ -60,13 +60,6 @@ h2{
   color: white;
 }
 
-.createButton {
-  display: flex;
-  padding: 12px 24px;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #fff;
-  background-color: #6C0002;
-  margin: 0.5rem;
+.button {
   width:50px;
 }
