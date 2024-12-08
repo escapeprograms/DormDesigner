@@ -139,10 +139,7 @@ const BakerFloorPlan = () => {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    console.log(`Clicked at: (${x}, ${y})`);
-    
-    // Check which room was clicked
-    const clickedRoom = rooms.find(room => 
+    const clickedRoom = rooms.find(room =>
       x >= room.x && x <= room.x + room.width &&
       y >= room.y && y <= room.y + room.height
     );
