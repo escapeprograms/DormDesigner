@@ -3,6 +3,7 @@ import './Dashboard.css';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useClerk } from '@clerk/clerk-react';
 import { getDesignsByUserId, createDesign } from '../../services/designServices.js';
+import deleteIcon from '../Assets/delete.png';
 
 const Dashboard = () => {
 
@@ -58,7 +59,6 @@ const Dashboard = () => {
         <h1>Your Designs</h1>
         <div className="buttons">
           <div className="button" onClick={handleNewDesign}>New Design</div>
-          <div className = "button">Delete Design</div>
           <div className="button" onClick={() => setIsVisible(!isVisible)}>Help</div>
           <div className="button" onClick={handleSignOut}>Sign Out</div>
         </div>
@@ -85,6 +85,7 @@ const Dashboard = () => {
                   */}
                   Untitled Design 1
                 </Link>
+                <img src={deleteIcon} alt={"delete"} className = "deleteButton"/>
               </li>
             ))}
           </ul>
