@@ -88,7 +88,7 @@ const Dashboard = () => {
                 <img src={deleteIcon} alt={"delete"} className = "delete-button"
                 onClick={() => {
                   deleteDesignById(design._id)
-                  navigate('/')
+                  navigate(`/dashboard/${userId}`)
                 }}
                 />
               </li>
