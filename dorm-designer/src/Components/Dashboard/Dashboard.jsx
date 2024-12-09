@@ -72,7 +72,7 @@ const Dashboard = () => {
                   {/*original code: {design._id} 
                       to change to when database is changed to include name: {design.name}
                   */}
-                  Untitled Design 1
+                  {design.name}
                 </Link>
               </li>
             ))}

@@ -21,6 +21,7 @@ const Editor = () => {
     const [showPopup, setShowPopup] = useState(true);
     const [showNamePopup, setShowNamePopup] = useState(false);
     const [designName, setDesignName] = useState("");
+    const [saveMessageVisible, setSaveMessageVisible] = useState(false);
     const floorVertices = useRef([])
     const objects = useRef([])
     
@@ -69,6 +70,10 @@ const Editor = () => {
             
             for(let i=0; i<furniture.length; i++) {
                 objects.current.push(furniture[i]);
+            }
+            console.log("design name in loading in editor: ", design.name);
+            if(design.name) {
+                setDesignName(design.name);
             }
 
         })
@@ -232,21 +237,36 @@ const Editor = () => {
 
     function handleSave() {
         console.log("design name: ", designName);
-        if(designName === "") {
+        if(designName === "" || designName === undefined) {
             setShowNamePopup(true);
         } else {
-            saveDesign(designId, userId, floorVertices.current, objects.current);
+            saveMessageAppear();
+            saveDesign(designId, userId, floorVertices.current, objects.current, designName);
         }
     }
 
     function handleNameChange(event) {
+        console.log("changing name in handlenamechange: ", event.target.value);
         setDesignName(event.target.value);
+    }
+
+    function saveMessageAppear() {
+        setSaveMessageVisible(true);
+        setTimeout(() => {
+            setSaveMessageVisible(false);
+        }, 1000);
     }
 
     return (
         <div ref={mountRef}>
             {showPopup && <ControlsPopup onClose={() => setShowPopup(false)} />}
-            {showNamePopup && <NamePopup onClose={() => setShowNamePopup(false)} onSave={() => saveDesign(designId, userId, floorVertices.current, objects.current)}/>}
+            {showNamePopup && <NamePopup 
+                designName={designName}
+                saveMessageAppear={saveMessageAppear}
+                setShowNamePopup={setShowNamePopup}
+                handleNameChange={handleNameChange} 
+                onClose={() => setShowNamePopup(false)} 
+                saveDesign={() => saveDesign(designId, userId, floorVertices.current, objects.current, designName)}/>}
             <input 
                 type="text"
                 value={designName}
@@ -309,6 +329,18 @@ const Editor = () => {
             >
                 ?
             </button>
+            {saveMessageVisible && 
+                <p
+                    style={{
+                        position: 'fixed',
+                        bottom: '12px',
+                        right: '180px',
+                    }}
+                >
+                    Changes Saved ✓
+                </p>
+            }
+            
         </div>
     );
 };

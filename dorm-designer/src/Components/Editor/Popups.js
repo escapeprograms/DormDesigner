@@ -25,7 +25,17 @@ const ControlsPopup = ({ onClose }) => {
     );
 };
 
-const NamePopup = ({onSave, onClose}) => {
+const NamePopup = ({designName, saveDesign, onClose, handleNameChange, setShowNamePopup, saveMessageAppear}) => {
+
+    function handleSave() {
+        if(designName === "" || designName === undefined) {
+            console.log("no name");
+        } else {
+            setShowNamePopup(false);
+            saveDesign();
+            saveMessageAppear();
+        }
+    }
     return (
         <div style = {{
             position: 'fixed',
@@ -43,6 +53,7 @@ const NamePopup = ({onSave, onClose}) => {
             <p style={{color: "black"}}>Give your untitled design a name before saving it.</p>
             <input
                 type="text"
+                onChange={handleNameChange}
                 placeholder='Untitled Design'
                 style = {{
                     width: "100%",
@@ -54,7 +65,7 @@ const NamePopup = ({onSave, onClose}) => {
             </input>
             <div>
                 <button
-                    onClick = {onSave}
+                    onClick = {handleSave}
                     style={{
                         height: "40px",
                         marginTop: "15px",
