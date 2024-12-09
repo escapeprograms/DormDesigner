@@ -230,7 +230,9 @@ const Editor = () => {
        
 
         return () => {
-            mountRef.current.removeChild(renderer.domElement);
+            if (mountRef.current && renderer.domElement) {
+                mountRef.current.removeChild(renderer.domElement);
+            }
         };
     }, []);
 

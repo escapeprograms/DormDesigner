@@ -1,93 +1,103 @@
-import { strict as assert } from 'assert';
+/* eslint-disable no-unused-expressions */
+/* eslint-disable jest/valid-expect */
+import { expect } from 'chai';
+import sinon from 'sinon';
 import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
 import {
-    getDesignsByUserId,
-    getDesignById,
-    createDesign,
-    deleteDesignById,
-    updateDesignById,
-    deleteDesignsByUserId,
-    deleteAllDesigns
-} from './designServices.js'; 
+  getDesignsByUserId,
+  getDesignById,
+  createDesign,
+  deleteDesignById,
+  updateDesignById,
+  deleteDesignsByUserId,
+  deleteAllDesigns,
+} from './designServices.js';
 
-const mock = new MockAdapter(axios);
-// const API_URL = 'https://dormdesignerws.onrender.com/';
-const API_URL_base = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-const API_URL = API_URL_base + "/design";
+describe('Design Services API Functions', () => {
+  const API_URL = 'http://localhost:5000/api/design';
+  const userId = 'user123';
+  const designId = 'design123';
+  const designData = { name: 'New Design', items: [] };
+  let sandbox;
 
-describe('Design Services API Functions', function() {
-    afterEach(() => {
-        mock.reset(); 
-    });
+  beforeEach(() => {
+    // Create a sandbox before each test
+    sandbox = sinon.createSandbox();
+  });
 
-    it('should fetch designs by userId', async function() {
-        const userId = '123';
-        const mockData = [{ id: '1', name: 'Design 1' }, { id: '2', name: 'Design 2' }];
+  afterEach(() => {
+    // Restore the sandbox after each test
+    sandbox.restore();
+  });
 
-        mock.onGet(`${API_URL}/${userId}`).reply(200, mockData);
+  // Get all designs by UserId
+  it('should fetch designs by userId', async () => {
+    const mockResponse = { data: [{ id: '1', name: 'Design1' }] };
+    sandbox.stub(axios, 'get').resolves(mockResponse);
 
-        const result = await getDesignsByUserId(userId);
-        assert.deepEqual(result, mockData);
-    });
+    const result = await getDesignsByUserId(userId);
+    expect(result).to.deep.equal(mockResponse.data);
+    expect(axios.get.calledWith(`${API_URL}/${userId}`)).to.be.true;
+  });
 
-    it('should fetch a design by id', async function() {
-        const id = '1';
-        const mockData = { id: '1', name: 'Design 1' };
+  // Get design by Id
+  it('should fetch a design by id', async () => {
+    const mockResponse = { data: { id: designId, name: 'Design1' } };
+    sandbox.stub(axios, 'get').resolves(mockResponse);
 
-        mock.onGet(`${API_URL}/user/${id}`).reply(200, mockData);
+    const result = await getDesignById(designId);
+    expect(result).to.deep.equal(mockResponse.data);
+    expect(axios.get.calledWith(`${API_URL}/user/${designId}`)).to.be.true;
+  });
 
-        const result = await getDesignById(id);
-        assert.deepEqual(result, mockData);
-    });
+  // Create a new design
+  it('should create a new design', async () => {
+    const mockResponse = { data: { id: designId, ...designData } };
+    sandbox.stub(axios, 'post').resolves(mockResponse);
 
-    it('should create a new design', async function() {
-        const designData = { name: 'New Design' };
-        const mockResponse = { id: '1', name: 'New Design' };
+    const result = await createDesign(designData);
+    expect(result).to.deep.equal(mockResponse.data);
+    expect(axios.post.calledWith(API_URL, designData)).to.be.true;
+  });
 
-        mock.onPost(API_URL).reply(201, mockResponse);
+  // Delete a design by id
+  it('should delete a design by id', async () => {
+    const mockResponse = { data: { message: 'Design deleted' } };
+    sandbox.stub(axios, 'delete').resolves(mockResponse);
 
-        const result = await createDesign(designData);
-        assert.deepEqual(result, mockResponse);
-    });
+    const result = await deleteDesignById(designId);
+    expect(result).to.deep.equal(mockResponse.data);
+    expect(axios.delete.calledWith(`${API_URL}/${designId}`)).to.be.true;
+  });
 
-    it('should delete a design by id', async function() {
-        const id = '1';
-        const mockResponse = { message: 'Design deleted successfully' };
+  // Update a design by id
+  it('should update a design by id', async () => {
+    const updatedDesignData = { name: 'Updated Design' };
+    const mockResponse = { data: { id: designId, ...updatedDesignData } };
+    sandbox.stub(axios, 'put').resolves(mockResponse);
 
-        mock.onDelete(`${API_URL}/${id}`).reply(200, mockResponse);
+    const result = await updateDesignById(designId, updatedDesignData);
+    expect(result).to.deep.equal(mockResponse.data);
+    expect(axios.put.calledWith(`${API_URL}/${designId}`, updatedDesignData)).to.be.true;
+  });
 
-        const result = await deleteDesignById(id);
-        assert.deepEqual(result, mockResponse);
-    });
+  // Delete all designs by UserId
+  it('should delete all designs by userId', async () => {
+    const mockResponse = { data: { message: 'All designs deleted for user' } };
+    sandbox.stub(axios, 'delete').resolves(mockResponse);
 
-    it('should update a design by id', async function() {
-        const id = '1';
-        const designData = { name: 'Updated Design' };
-        const mockResponse = { id: '1', name: 'Updated Design' };
+    const result = await deleteDesignsByUserId(userId);
+    expect(result).to.deep.equal(mockResponse.data);
+    expect(axios.delete.calledWith(`${API_URL}/user/${userId}`)).to.be.true;
+  });
 
-        mock.onPut(`${API_URL}/${id}`).reply(200, mockResponse);
+  // Delete all designs (for all users)
+  it('should delete all designs for all users', async () => {
+    const mockResponse = { data: { message: 'All designs deleted' } };
+    sandbox.stub(axios, 'delete').resolves(mockResponse);
 
-        const result = await updateDesignById(id, designData);
-        assert.deepEqual(result, mockResponse);
-    });
-
-    it('should delete all designs for a user by userId', async function() {
-        const userId = '123';
-        const mockResponse = { message: 'All designs for user deleted' };
-
-        mock.onDelete(`${API_URL}/user/${userId}`).reply(200, mockResponse);
-
-        const result = await deleteDesignsByUserId(userId);
-        assert.deepEqual(result, mockResponse);
-    });
-
-    it('should delete all designs', async function() {
-        const mockResponse = { message: 'All designs deleted' };
-
-        mock.onDelete(API_URL).reply(200, mockResponse);
-
-        const result = await deleteAllDesigns();
-        assert.deepEqual(result, mockResponse);
-    });
+    const result = await deleteAllDesigns();
+    expect(result).to.deep.equal(mockResponse.data);
+    expect(axios.delete.calledWith(API_URL)).to.be.true;
+  });
 });

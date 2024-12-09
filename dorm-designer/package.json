@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "unit test": "npx mocha C:\\Users\\17863\\Documents\\GitHub\\DormDesigner2\\dorm-designer\\src\\services\\designServices.test.mjs"
+    "test:unit": "mocha src/services/designServices.test.mjs"
   },
   "eslintConfig": {
     "extends": [
@@ -47,6 +47,7 @@
     "axios-mock-adapter": "^2.1.0",
     "babel-jest": "^29.7.0",
     "chai": "^5.1.2",
-    "mocha": "^10.8.2"
+    "mocha": "^10.8.2",
+    "sinon": "^19.0.2"
   }
 }
