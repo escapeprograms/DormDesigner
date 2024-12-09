@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -7,8 +7,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 import { useParams } from 'react-router-dom';
 
-import {saveDesign, loadDesign} from './saveDesign.js';
-import {ControlsPopup, NamePopup} from './Popups.js';
+import { ControlsPopup, NamePopup } from './Popups.js';
+import { loadDesign, saveDesign } from './saveDesign.js';
 
  
 
@@ -328,6 +328,7 @@ const Editor = () => {
             >
                 ?
             </button>
+
             {saveMessageVisible && 
                 <p
                     style={{
@@ -339,27 +340,33 @@ const Editor = () => {
                     Changes Saved ✓
                 </p>
             }
-            
-            <button 
-                // onClick={() => navigate('/')} 
-                onClick={() => window.location.href = '/'}
+            <Link 
+                to={`/dashboard/${userId}`} // Replace ':userId' dynamically
+
                 style={{
                     position: 'fixed',
-                    top: '20px',
+                    top: '80px',
                     left: '20px',
-                    backgroundColor: '#3395ff',
+
+                    height: '20px',
+                    padding: '10px 20px',
+                    backgroundColor: '#800000',
                     color: 'white',
                     border: 'none',
-                    borderRadius: '4px',
-                    width: '90px',
-                    height: '40px',
-                    fontSize: '20px',
+                    borderRadius: '8px',
+
                     cursor: 'pointer',
                     zIndex: 1000,
+                    textDecoration: 'none', // Remove default link underline
+                    display: 'inline-block', // Make it look like a button
+                    textAlign: 'center',
+                    lineHeight: '20px', // Center text vertically
                 }}
             >
-                🡨 back
-            </button>
+
+                Back
+            </Link>
+
         </div>
     );
 };
