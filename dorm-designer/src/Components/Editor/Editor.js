@@ -19,6 +19,7 @@ const Editor = () => {
     const [showPopup, setShowPopup] = useState(true);
     const [showNamePopup, setShowNamePopup] = useState(false);
     const [designName, setDesignName] = useState("");
+    const [saveMessageVisible, setSaveMessageVisible] = useState(false);
     const floorVertices = useRef([])
     const objects = useRef([])
     const navigate = useNavigate();
@@ -68,6 +69,10 @@ const Editor = () => {
             
             for(let i=0; i<furniture.length; i++) {
                 objects.current.push(furniture[i]);
+            }
+            console.log("design name in loading in editor: ", design.name);
+            if(design.name) {
+                setDesignName(design.name);
             }
 
         })
@@ -231,21 +236,36 @@ const Editor = () => {
 
     function handleSave() {
         console.log("design name: ", designName);
-        if(designName === "") {
+        if(designName === "" || designName === undefined) {
             setShowNamePopup(true);
         } else {
-            saveDesign(designId, userId, floorVertices.current, objects.current);
+            saveMessageAppear();
+            saveDesign(designId, userId, floorVertices.current, objects.current, designName);
         }
     }
 
     function handleNameChange(event) {
+        console.log("changing name in handlenamechange: ", event.target.value);
         setDesignName(event.target.value);
+    }
+
+    function saveMessageAppear() {
+        setSaveMessageVisible(true);
+        setTimeout(() => {
+            setSaveMessageVisible(false);
+        }, 1000);
     }
 
     return (
         <div ref={mountRef}>
             {showPopup && <ControlsPopup onClose={() => setShowPopup(false)} />}
-            {showNamePopup && <NamePopup onClose={() => setShowNamePopup(false)} onSave={() => saveDesign(designId, userId, floorVertices.current, objects.current)}/>}
+            {showNamePopup && <NamePopup 
+                designName={designName}
+                saveMessageAppear={saveMessageAppear}
+                setShowNamePopup={setShowNamePopup}
+                handleNameChange={handleNameChange} 
+                onClose={() => setShowNamePopup(false)} 
+                saveDesign={() => saveDesign(designId, userId, floorVertices.current, objects.current, designName)}/>}
             <input 
                 type="text"
                 value={designName}
@@ -253,7 +273,7 @@ const Editor = () => {
                 style={{
                         position: 'fixed',
                         top: '20px',
-                        left: '20px',
+                        left: '130px',
                         height: '40px',
                         boxSizing: 'border-box',
 
@@ -295,7 +315,7 @@ const Editor = () => {
                     position: 'fixed',
                     bottom: '20px',
                     right: '20px',
-                    backgroundColor: '#007bff',
+                    backgroundColor: '#3395ff',
                     color: 'white',
                     border: 'none',
                     borderRadius: '50%',
@@ -308,18 +328,33 @@ const Editor = () => {
             >
                 ?
             </button>
+
+            {saveMessageVisible && 
+                <p
+                    style={{
+                        position: 'fixed',
+                        bottom: '12px',
+                        right: '180px',
+                    }}
+                >
+                    Changes Saved ✓
+                </p>
+            }
             <Link 
                 to={`/dashboard/${userId}`} // Replace ':userId' dynamically
+
                 style={{
                     position: 'fixed',
                     top: '80px',
                     left: '20px',
+
                     height: '20px',
                     padding: '10px 20px',
                     backgroundColor: '#800000',
                     color: 'white',
                     border: 'none',
                     borderRadius: '8px',
+
                     cursor: 'pointer',
                     zIndex: 1000,
                     textDecoration: 'none', // Remove default link underline
@@ -328,8 +363,10 @@ const Editor = () => {
                     lineHeight: '20px', // Center text vertically
                 }}
             >
+
                 Back
             </Link>
+
         </div>
     );
 };

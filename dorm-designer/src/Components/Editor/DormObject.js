@@ -340,12 +340,13 @@ class DormLayout {
 }
 
 class DormDesign {
-    constructor (floorVertices, currentFurniture) {
+    constructor (floorVertices, currentFurniture, name) {
         this.floorVertices = floorVertices;
         this.walls = getWallMeshes(floorVertices, 0xffffff, 6*12);
         this.floor = getFloorMesh(floorVertices, 0xaaaaaa);
         // this.layout = layout; //DormLayout object
         this.currentFurniture = currentFurniture;
+        this.name = name;
     }
 }
 

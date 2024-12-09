@@ -4,7 +4,7 @@ import { updateItemById, createItem, getItemById } from '../../services/itemServ
 import { DormDesign, FloorItem } from './DormObject.js';
 import * as THREE from 'three';
 
-function saveDesign(designId, userId, floorVertices, objects) {
+function saveDesign(designId, userId, floorVertices, objects, designName) {
     console.log("Saving Design!");    
 
     //convert floorVertices to correct format
@@ -31,6 +31,7 @@ function saveDesign(designId, userId, floorVertices, objects) {
         userId: userId,
         vertices: floorVerticesArr,
         furnitureIds: objectIds, 
+        name: designName
     });
 }
 
@@ -54,7 +55,7 @@ async function loadDesign(designId, scene) {
         return new THREE.Vector2(v[0], v[1]);
     });
 
-    let dormDesign = new DormDesign(floorVertices, furniture);
+    let dormDesign = new DormDesign(floorVertices, furniture, design.name);
     return dormDesign;
 }
 
