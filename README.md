@@ -13,7 +13,9 @@ Clone the project with `git clone https://github.com/escapeprograms/DormDesigner
 Inside the `DormDesigner` folder, run `npm run "dev set up"`.
 
 # Running
-One-step build and run: `npm run .` in `DormDesigner`
+One-step build and run backend: `npm run .` in `DormDesigner`(Run backend locally)
+
+One-step run frontend locally: `npm run 'front end'`.
 
 In development, you can build and run parts separately:
 
@@ -29,7 +31,9 @@ Use the seed.js file to add/remove data from the database.
 # Testing
 
 To run unit tests for designServices.js (one component of our system), run `npm run 'unit test'` in `DormDesigner`.
-To run integration tests for our major use case (Logging in and out, Creating and Saving a Dorm Design), run `npx cypress open` in `DormDesigner`.
+To run integration tests for our major use case (Logging in and out, Creating and Saving a Dorm Design):
+- run `npm run 'front end'` in `DormDesigner` to run the front end.
+- run `npx cypress open` in `DormDesigner`. 
 
 # Troubleshooting
 
