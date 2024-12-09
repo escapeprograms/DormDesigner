@@ -38,20 +38,15 @@ describe('Authentication and Design Creation Flow', () => {
         cy.url().should('match', /\/editor\/mock-user-id\/[a-f0-9]+/);
 
         cy.debug();
-    
-        cy.contains('Save').click();
 
-        cy.get('input[placeholder="Untitled Design"]')
-        .should('be.visible')
-        .invoke('val', 'XYZ');
+        cy.contains('Close').click();
 
         cy.contains('Save').click();
 
         cy.contains('Back').click();
 
-        // cy.url().should('include', '/dashboard/mock-user-id');
-    
-        // cy.contains('My New Dorm Design').should('be.visible'); verify that the design appears in the dashboard
+        cy.url().should('include', '/dashboard/mock-user-id');
+
     });
 
     it('should log out successfully', () => {

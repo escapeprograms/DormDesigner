@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     ".": "cd dorm-designer && npm run build && cd .. && node .",
-    "dev set up": "npm i && cd dorm-designer && npm install && npm i react-router-dom && npm i react-scripts && cd .. && cd back-end && npm install && cd .."
+    "dev set up": "npm i && cd dorm-designer && npm install && npm i react-router-dom && npm i react-scripts && cd .. && cd back-end && npm install && cd ..",
+    "unit test": "cd dorm-designer && npm run test:unit && cd .."
   },
   "author": "",
   "license": "ISC",

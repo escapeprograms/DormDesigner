@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useClerk } from '@clerk/clerk-react';
-import { getDesignsByUserId, createDesign } from '../../services/designServices.js';
+import { getDesignsByUserId, deleteDesignById, createDesign } from '../../services/designServices.js';
+import deleteIcon from '../Assets/delete.png';
 
 const Dashboard = () => {
 
@@ -50,16 +51,27 @@ const Dashboard = () => {
     }
   };
 
+  const [isVisible, setIsVisible] = useState(false);
+
   return (
     <div>
       <nav className="navbar">
         <h1>Your Designs</h1>
         <div className="buttons">
           <div className="button" onClick={handleNewDesign}>New Design</div>
-          <div className="button">Help</div>
+          <div className="button" onClick={() => setIsVisible(!isVisible)}>Help</div>
           <div className="button" onClick={handleSignOut}>Sign Out</div>
         </div>
       </nav>
+      <div className="help-box">
+        {isVisible && 
+          <div className="help-box-text">
+            <li>To create a design, click "New Design", then click on a residential area, click on a room in the floor plan, and click "Create"</li>
+            <li>To delete a design, click on the trash icon next to a design's name</li>
+            <li>Click "Help" to hide this message</li>
+          </div>
+        }
+      </div>
       <main className="designs-container">
         {error ? (
           <p>{error}</p> // Display error message if any error occurs
@@ -73,6 +85,12 @@ const Dashboard = () => {
                   */}
                   {design.name}
                 </Link>
+                <img src={deleteIcon} alt={"delete"} className = "delete-button"
+                onClick={() => {
+                  deleteDesignById(design._id)
+                  window.location.reload()
+                }}
+                />
               </li>
             ))}
           </ul>

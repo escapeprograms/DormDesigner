@@ -19,6 +19,7 @@ const ControlsPopup = ({ onClose }) => {
                 <li>Click Dorm Item - select</li>
                 <li>Click + Drag Dorm Item - move item</li>
                 <li>Select Item, then left/right arrow keys - rotate item</li>
+                <li>Make sure to click "Save" before clicking the "Back" button to ensure your design is saved.</li>
             </ul>
             <button onClick={onClose}>Close</button>
         </div>
