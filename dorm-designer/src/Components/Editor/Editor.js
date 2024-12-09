@@ -341,7 +341,8 @@ const Editor = () => {
             }
             
             <button 
-                onClick={() => navigate('/')} 
+                // onClick={() => navigate('/')} 
+                onClick={() => window.location.href = '/'}
                 style={{
                     position: 'fixed',
                     top: '20px',
