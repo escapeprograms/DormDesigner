@@ -273,7 +273,7 @@ const Editor = () => {
                 style={{
                         position: 'fixed',
                         top: '20px',
-                        left: '20px',
+                        left: '130px',
                         height: '40px',
                         boxSizing: 'border-box',
 
@@ -315,7 +315,7 @@ const Editor = () => {
                     position: 'fixed',
                     bottom: '20px',
                     right: '20px',
-                    backgroundColor: '#007bff',
+                    backgroundColor: '#3395ff',
                     color: 'white',
                     border: 'none',
                     borderRadius: '50%',
@@ -346,18 +346,18 @@ const Editor = () => {
                     position: 'fixed',
                     top: '20px',
                     left: '20px',
-                    backgroundColor: '#007bff',
+                    backgroundColor: '#3395ff',
                     color: 'white',
                     border: 'none',
-                    borderRadius: '50%',
-                    width: '40px',
+                    borderRadius: '4px',
+                    width: '90px',
                     height: '40px',
                     fontSize: '20px',
                     cursor: 'pointer',
                     zIndex: 1000,
                 }}
             >
-                back
+                🡨 back
             </button>
         </div>
     );
