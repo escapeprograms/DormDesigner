@@ -347,12 +347,12 @@ const Editor = () => {
 
                 style={{
                     position: 'fixed',
-                    top: '80px',
+                    top: '20px',
                     left: '20px',
 
                     height: '20px',
                     padding: '10px 20px',
-                    backgroundColor: '#800000',
+                    backgroundColor: '#3395ff',
                     color: 'white',
                     border: 'none',
                     borderRadius: '8px',
@@ -366,7 +366,7 @@ const Editor = () => {
                 }}
             >
 
-                Back
+                🡨 Back
             </Link>
 
         </div>
