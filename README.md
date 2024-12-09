@@ -25,3 +25,6 @@ Run backend: `node .` in `DormDesigner`
 
 # Database
 Use the seed.js file to add/remove data from the database. 
+
+# Testing
+

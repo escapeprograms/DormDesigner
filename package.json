@@ -22,6 +22,15 @@
   "type": "module",
   "keywords": [],
   "devDependencies": {
-    "cypress": "^13.16.1"
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "axios": "^1.7.9",
+    "axios-mock-adapter": "^2.1.0",
+    "babel-jest": "^29.7.0",
+    "chai": "^5.1.2",
+    "cypress": "^13.16.1",
+    "jest": "^27.5.1",
+    "jest-mock": "^29.7.0",
+    "mocha": "^11.0.1"
   }
 }

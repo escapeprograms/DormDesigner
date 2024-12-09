@@ -7,7 +7,7 @@ const designManager = new DesignManager();
 router.get('/:userId', async (req, res) => {
     try {
         const designs = await designManager.getDesignsByUserId(req.params.userId);
-        if (designs.length === 0) return res.status(404).json({ message: "No designs found for the given UserId" });
+        if (designs.length === 0) return 0;
         res.json(designs);
     } catch (error) {
         res.status(500).json({ message: error.message });
