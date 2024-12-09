@@ -1,17 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 import * as THREE from 'three';
-import axios from 'axios'; 
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
-import {getFloorMesh, getWallMeshes} from './three-objects/floor.js';
-import { Footprint, DormObject, FloorItem } from './DormObject.js';
-import _ from 'lodash'
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 // import testDesign from './three-objects/testDesign.js';
-import print from './printJSON.js';
 
 import { useParams } from 'react-router-dom';
+
 import {saveDesign, loadDesign} from './saveDesign.js';
 import {ControlsPopup, NamePopup} from './Popups.js';
+
  
 
 
@@ -24,6 +22,7 @@ const Editor = () => {
     const [saveMessageVisible, setSaveMessageVisible] = useState(false);
     const floorVertices = useRef([])
     const objects = useRef([])
+    const navigate = useNavigate();
     
 
     useEffect(() => {
@@ -341,6 +340,25 @@ const Editor = () => {
                 </p>
             }
             
+            <button 
+                onClick={() => navigate('/')} 
+                style={{
+                    position: 'fixed',
+                    top: '20px',
+                    left: '20px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '40px',
+                    height: '40px',
+                    fontSize: '20px',
+                    cursor: 'pointer',
+                    zIndex: 1000,
+                }}
+            >
+                back
+            </button>
         </div>
     );
 };
