@@ -22,7 +22,7 @@ const BuildingSelection = () => {
   const buildings = buildingsByArea[selectedArea] || [];
 
   // Buildings that are not 'coming soon'
-  const availableBuildings = ['Baker', 'Field', 'Grayson', 'Van Meter'];
+  const availableBuildings = ['Baker'];
 
   const handleBuildingSelect = (building) => {
     console.log(`Selected building: ${building}`);

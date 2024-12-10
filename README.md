@@ -33,6 +33,7 @@ Use the seed.js file to add/remove data from the database.
 To run unit tests for designServices.js (one component of our system), run `npm run 'unit test'` in `DormDesigner`.
 To run integration tests for our major use case (Logging in and out, Creating and Saving a Dorm Design):
 - run `npm run 'front end'` in `DormDesigner` to run the front end.
+- run `npm run .` in `DormDesigner` to run the back end.
 - run `npx cypress open` in `DormDesigner`. 
 
 # Troubleshooting
@@ -41,4 +42,4 @@ If any of the scripts don't work as intended, navigate to root directory (`DormD
 
 # More Details on 1.0 Release
 
-Reference our 1.0 documentation: https://docs.google.com/document/d/1hRVvtWmyXj4I55u1QDQDL_f00Ws3bVGsS3SvctE7q_4/edit?tab=t.0#heading=h.qvzv95a5wx8k
+Reference our 1.0 document for extended user, admin, and test documentation: https://docs.google.com/document/d/1hRVvtWmyXj4I55u1QDQDL_f00Ws3bVGsS3SvctE7q_4/edit?tab=t.0#heading=h.qvzv95a5wx8k

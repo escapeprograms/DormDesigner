@@ -251,6 +251,10 @@ const Editor = () => {
         setDesignName(event.target.value);
     }
 
+    function handleBackClick() { // refreshes page once on back click
+        localStorage.setItem('refreshDashboard', 'true');
+    }
+
     function saveMessageAppear() {
         setSaveMessageVisible(true);
         setTimeout(() => {
@@ -344,7 +348,7 @@ const Editor = () => {
             }
             <Link 
                 to={`/dashboard/${userId}`} // Replace ':userId' dynamically
-
+                onClick={handleBackClick} // Refreshes page on back click
                 style={{
                     position: 'fixed',
                     top: '20px',
